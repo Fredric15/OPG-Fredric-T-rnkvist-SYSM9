@@ -19,6 +19,8 @@ namespace CookMaster
         public MainWindow()
         {
             InitializeComponent();
+
+            
         }
     }
 }
