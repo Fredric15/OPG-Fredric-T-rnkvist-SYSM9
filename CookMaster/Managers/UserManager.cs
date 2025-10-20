@@ -24,7 +24,7 @@ namespace CookMaster.Services
         public bool IsAuthenticated => CurrentUser != null;
         public bool Login(string username, string password)
         { /* sätt CurrentUser, returnera true/false */
-            
+            return true;
         }
         public void Logout() => CurrentUser = null;
     }
