@@ -16,9 +16,9 @@ namespace CookMaster.Model
 			get { return userName; }
 			set { userName = value; }
 		}
-
+		
 		private string password;
-
+		
 		public string Password
 		{
 			get { return password; }
@@ -39,8 +39,8 @@ namespace CookMaster.Model
 
 
         public void ValidateLogin()
-        { 
-			
+        {
+	
 		}
 
 		public void ChangePassword()

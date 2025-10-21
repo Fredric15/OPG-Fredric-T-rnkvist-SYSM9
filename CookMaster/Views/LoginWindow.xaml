@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:CookMaster.Views" xmlns:local1="clr-namespace:CookMaster.ViewModel"
         mc:Ignorable="d"
         Title="CookMaster" Height="300" Width="530">
-    <Window.DataContext>
-        <local1:LoginViewModel/>
-    </Window.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -18,10 +16,10 @@
         
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock Text="Username" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <TextBox Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
             <TextBlock Text="Password" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <TextBox Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <Button Content="Logga In" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
+            <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+            <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
             <Button Content="Registrera" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
             <Button VerticalAlignment="Bottom" Width="55" Margin="5">
                 <TextBlock Text="Glömt lösenord" FontWeight="Bold" TextWrapping="WrapWithOverflow"/>

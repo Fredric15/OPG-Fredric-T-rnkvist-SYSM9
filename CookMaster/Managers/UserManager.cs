@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookMaster.Services
+namespace CookMaster.Managers
 {
     public class UserManager : ViewModelBase
     {
@@ -21,6 +21,19 @@ namespace CookMaster.Services
                 _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAuthenticated));
             }
         }
+
+        public UserManager()
+        {
+            _users = new List<User>();
+            SeedDefaultUsers();
+        }
+
+        private void SeedDefaultUsers()
+        {
+            _users.Add(new User {UserName = "admin", Password = "password", Country = "Sverige"});
+            _users.Add(new User { UserName = "user", Password = "password", Country = "Sverige" });
+        }
+
         public bool IsAuthenticated => CurrentUser != null;
         public bool Login(string username, string password)
         { /* sätt CurrentUser, returnera true/false */
