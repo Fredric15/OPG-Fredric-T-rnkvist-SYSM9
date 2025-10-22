@@ -37,8 +37,35 @@ namespace CookMaster.Managers
         public bool IsAuthenticated => CurrentUser != null;
         public bool Login(string username, string password)
         { /* sätt CurrentUser, returnera true/false */
-            return true;
+
+            foreach (var user in _users)
+            {
+                if (user.UserName == username && user.Password == password)
+                {
+                    CurrentUser = user;
+                    return true;
+                }
+            }
+            return false;
         }
         public void Logout() => CurrentUser = null;
+
+        public void Register(string username, string password, string country)
+        {
+            _users.Add(new User {UserName = username, Password=password,Country = country});
+            
+        }
+
+        public bool CheckUsername(string username)
+        {
+            foreach (var user in _users)
+            {
+                if (user.UserName == username)
+                    return true;
+            }
+            return false;
+        
+        }
+        
     }
 }

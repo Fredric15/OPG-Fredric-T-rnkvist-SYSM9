@@ -25,7 +25,7 @@ namespace CookMaster.Model
 			set { password = value; }
 		}
 
-		private string country;
+        private string country;
 
 		public string Country
 		{

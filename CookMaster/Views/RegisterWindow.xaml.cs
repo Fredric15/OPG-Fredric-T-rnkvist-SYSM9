@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CookMaster.Managers;
+using CookMaster.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,9 @@ namespace CookMaster.Views
         public RegisterWindow()
         {
             InitializeComponent();
+            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            RegisterViewModel rw = new RegisterViewModel(userManager);
+
         }
     }
 }

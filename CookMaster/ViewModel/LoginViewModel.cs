@@ -1,11 +1,13 @@
 ﻿using CookMaster.Managers;
 using CookMaster.Model;
+using CookMaster.Views;
 using MVVM_KlonaMIg.MVVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -58,14 +60,31 @@ namespace CookMaster.ViewModel
 		}
 
 	
-		public RelayCommand LoginCommand => new RelayCommand(execute => login(), canExecute => CanLogin());
+		public RelayCommand LoginCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
+        public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
+        public RelayCommand ForgotPCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
+
 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
-		private void login()
+		private void Login()
 		{
-
+			if (_userManager.Login(Username,Password))
+			{
+				RegisterWindow rw = new RegisterWindow();
+				
+			}
 		}
+		private void Register()
+		{
+            RegisterWindow rw = new RegisterWindow();
+			rw.DataContext = new RegisterViewModel(_userManager);
+			rw.Show();
+			
+			
+			
+			
 
+        }
         private void LoadImageFromResource(string v)
         {
 			try

@@ -12,15 +12,15 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"><Image Source="{Binding DisplayLogo}" Width="100" Height="100" Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/></TextBlock>
-        
+        <Image Source="{Binding DisplayLogo}" Width="100" Height="100" Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock Text="Username" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
             <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
             <TextBlock Text="Password" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
             <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
             <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
-            <Button Content="Registrera" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
+            <Button Content="Registrera" Command="{Binding RegisterCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
             <Button VerticalAlignment="Bottom" Width="55" Margin="5">
                 <TextBlock Text="Glömt lösenord" FontWeight="Bold" TextWrapping="WrapWithOverflow"/>
             </Button>
