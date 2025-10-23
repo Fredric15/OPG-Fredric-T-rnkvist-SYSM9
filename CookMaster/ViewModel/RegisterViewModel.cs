@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -13,6 +14,8 @@ namespace CookMaster.ViewModel
     class RegisterViewModel : ViewModelBase
     {
         private readonly UserManager _userManager;
+        public event Action<string>? RequestMessage;
+        public event Action? RequestClose;
         private string _userName;
         public string UserName
         {
@@ -96,11 +99,14 @@ namespace CookMaster.ViewModel
         public RegisterViewModel(UserManager userManager)
         {
             _userManager = userManager;
+            
         }
+        
         public RelayCommand NewUserCommand => new RelayCommand(execute => CreateUser(), canExecute => InputBoxChecked());
+        public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
         private bool InputBoxChecked()
         {
-            if (!string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPw) && !string.IsNullOrWhiteSpace(SelectedCountry) && !string.IsNullOrWhiteSpace(SelectedQ) && !string.IsNullOrWhiteSpace(SecurityAnswer) && !CheckUsername(UserName) && MatchingPw() && ValidPw())
+            if (!string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPw) && !string.IsNullOrWhiteSpace(SelectedCountry) && !string.IsNullOrWhiteSpace(SelectedQ) && !string.IsNullOrWhiteSpace(SecurityAnswer) && CheckUsername(UserName) && MatchingPw() && ValidPw())
             {
                 
                 return true;
@@ -158,28 +164,33 @@ namespace CookMaster.ViewModel
 
         private bool CheckUsername(string username)
         {
-            if (_userManager.CheckUsername(username))
+            if (!_userManager.CheckUsername(username))
             {
-                ErrorText = "Användarnamnet är upptaget.";
+                
                 return true;
             }
             else
             {
-                
+                ErrorText = "Användarnamnet är upptaget.";
                 return false;
             }
             
         }
 
         
-        public void CreateUser()
+        private void CreateUser()
         {
-            _userManager.Register(UserName, Password, SelectedCountry);
-            LoginWindow lw = new LoginWindow();
-            lw.Show();
+            _userManager.Register(UserName, Password, SelectedCountry, SelectedQ, SecurityAnswer);
+            
+            RequestMessage?.Invoke("Ny användare registrerad.");
+            
+            RequestClose?.Invoke();
             
         }
-
+        private void Cancel()
+        {
+            RequestClose?.Invoke();
+        }
         
     }
 }

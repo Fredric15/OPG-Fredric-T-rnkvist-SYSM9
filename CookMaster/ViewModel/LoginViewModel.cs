@@ -17,17 +17,8 @@ namespace CookMaster.ViewModel
     public class LoginViewModel : ViewModelBase
     {
 		private readonly UserManager _userManager;
-		private ImageSource _displayLogo;
+	
 		
-		public ImageSource DisplayLogo
-		{
-			get { return _displayLogo; }
-			set
-			{
-				_displayLogo = value;
-				OnPropertyChanged();
-			}
-		}
 		private string _username;
 
 		public string Username
@@ -50,19 +41,28 @@ namespace CookMaster.ViewModel
             }
         }
 
-        public LoginViewModel(UserManager userManager)
+		private string _errorText;
+
+		public string ErrorText
 		{
-			
+			get { return _errorText; }
+			set 
+			{ 
+				_errorText = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public LoginViewModel(UserManager userManager)
+		{
 			_userManager = userManager;
 			
-			//Skickar bild till metod
-			LoadImageFromResource("C:\\Users\\fredr\\source\\repos\\Sysm9\\Inlämningsuppgift\\CookMaster\\CookMaster\\MVVM\\marca.png");
 		}
 
 	
 		public RelayCommand LoginCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
         public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
-        public RelayCommand ForgotPCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
+        public RelayCommand ForgotPCommand => new RelayCommand(execute => Login(), canExecute => ForgotPassword());
 
 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
@@ -71,35 +71,31 @@ namespace CookMaster.ViewModel
 			if (_userManager.Login(Username,Password))
 			{
 				RegisterWindow rw = new RegisterWindow();
+				rw.Show(); 
 				
+			}
+			else
+			{ 
+				ErrorText = "Fel användarnamn eller lösenord."; 
 			}
 		}
 		private void Register()
 		{
-            RegisterWindow rw = new RegisterWindow();
-			rw.DataContext = new RegisterViewModel(_userManager);
-			rw.Show();
-			
-			
-			
-			
+			var userManager = (UserManager)Application.Current.Resources["UserManager"];
+			RegisterWindow rw = new RegisterWindow();
+			rw.DataContext = new RegisterViewModel(userManager);
+			rw.ShowDialog();
+		}
 
-        }
-        private void LoadImageFromResource(string v)
-        {
-			try
+		private bool ForgotPassword()
+		{
+			if (ErrorText != null)
 			{
-				var uri = new Uri(v);
-				var bitmap = new BitmapImage();
-				bitmap.BeginInit();
-				bitmap.UriSource = uri;
-				DisplayLogo = bitmap;
+				return true;
 			}
-			catch (Exception ex)
-			{
-				DisplayLogo = null;
+			else
+			{  return false; }
+		}
 
-			}
-        }
     }
 }

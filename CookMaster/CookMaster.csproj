@@ -9,12 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="MVVM\logo.jpg" />
     <None Remove="MVVM\marca.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="MVVM\logo.jpg" />
     <Resource Include="MVVM\marca.png" />
   </ItemGroup>
 

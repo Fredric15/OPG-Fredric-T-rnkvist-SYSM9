@@ -6,24 +6,30 @@
         xmlns:local="clr-namespace:CookMaster.Views" xmlns:local1="clr-namespace:CookMaster.ViewModel"
         mc:Ignorable="d"
         Title="CookMaster" Height="300" Width="530">
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Image Source="{Binding DisplayLogo}" Width="100" Height="100" Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Border>
+        <Border.Background>
+            <ImageBrush ImageSource="/MVVM/marca.png"/>
+        </Border.Background>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="Username" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <TextBlock Text="Password" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-            <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
-            <Button Content="Registrera" Command="{Binding RegisterCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
-            <Button VerticalAlignment="Bottom" Width="55" Margin="5">
-                <TextBlock Text="Glömt lösenord" FontWeight="Bold" TextWrapping="WrapWithOverflow"/>
-            </Button>
-        </StackPanel>
-    </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="{Binding ErrorText, Mode=OneWay}" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Foreground="Red" FontSize="18" Margin="5"/>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <TextBlock Text="Username" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <TextBlock Text="Password" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
+                <Button Content="Registrera" Command="{Binding RegisterCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
+                <Button VerticalAlignment="Bottom" Command="{Binding ForgotPCommand}" Width="55" Margin="5">
+                    <TextBlock Text="Glömt lösenord" FontWeight="Bold" TextWrapping="WrapWithOverflow"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

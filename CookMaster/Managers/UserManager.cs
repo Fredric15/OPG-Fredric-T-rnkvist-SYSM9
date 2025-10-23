@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 
 namespace CookMaster.Managers
 {
@@ -50,9 +51,9 @@ namespace CookMaster.Managers
         }
         public void Logout() => CurrentUser = null;
 
-        public void Register(string username, string password, string country)
+        public void Register(string username, string password, string country, string securityQ, string securityA)
         {
-            _users.Add(new User {UserName = username, Password=password,Country = country});
+            _users.Add(new User {UserName = username, Password=password,Country = country, SecurityQuestion = securityQ, SecurityAnswer = securityA});
             
         }
 

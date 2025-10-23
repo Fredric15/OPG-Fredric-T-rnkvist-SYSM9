@@ -19,6 +19,7 @@
         <ComboBox ItemsSource="{Binding SecurityQ}" SelectedItem="{Binding SelectedQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBox Text="{Binding SecurityAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content="Registrera ny användare" Command="{Binding NewUserCommand}"/>
+        <Button Content="Avbryt" Width="auto" Command="{Binding CancelCommand}"/>
         <TextBlock Text="{Binding ErrorText}" TextWrapping="Wrap" Foreground="Red" Width="auto"/>
     </StackPanel>
 </Window>

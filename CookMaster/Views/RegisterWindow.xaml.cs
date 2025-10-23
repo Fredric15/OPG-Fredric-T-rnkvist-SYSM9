@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,11 +22,30 @@ namespace CookMaster.Views
     /// </summary>
     public partial class RegisterWindow : Window
     {
+        public bool success {  get; set; }
         public RegisterWindow()
         {
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            RegisterViewModel rw = new RegisterViewModel(userManager);
+            
+            this.DataContextChanged += OnDataContextChanged;
+            
+            /*if (DataContext is RegisterViewModel rw)
+            {
+
+                rw.RequestClose += () => this.Close();
+            }*/
+        }
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+            if (e.NewValue is RegisterViewModel vm)
+            {
+                
+                vm.RequestClose += () => this.Close();
+
+                vm.RequestMessage += msg => MessageBox.Show(msg, "Information");
+            }
 
         }
     }
