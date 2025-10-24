@@ -62,24 +62,19 @@ namespace CookMaster.ViewModel
 	
 		public RelayCommand LoginCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
         public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
-        public RelayCommand RecoverPwCommand => new RelayCommand(execute => RecoverPassword(), canExecute => ForgotPassword());
+        public RelayCommand RecoverPwCommand => new RelayCommand(execute => RecoverPassword());
 
         private void RecoverPassword()
         {
-            var userManager = (UserManager)Application.Current.Resources["UserManager"];
-			RecoverPwWindow recover = new RecoverPwWindow();
-            recover.DataContext = new RecoverPwViewModel(userManager);
-            recover.ShowDialog();
-        }
+            RecoverPwd?.Invoke(this, System.EventArgs.Empty);
+		}
 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
 		private void Login()
 		{
 			if (_userManager.Login(Username,Password))
 			{
-				RegisterWindow rw = new RegisterWindow();
-				rw.Show(); 
-				
+				OnLoginSuccess?.Invoke(this, System.EventArgs.Empty);
 			}
 			else
 			{ 
@@ -88,21 +83,11 @@ namespace CookMaster.ViewModel
 		}
 		private void Register()
 		{
-			var userManager = (UserManager)Application.Current.Resources["UserManager"];
-			RegisterWindow rw = new RegisterWindow();
-			rw.DataContext = new RegisterViewModel(userManager);
-			rw.ShowDialog();
+			OpenRegister?.Invoke(this, System.EventArgs.Empty);
 		}
 
-		private bool ForgotPassword()
-		{
-			if (ErrorText != null)
-			{
-				return true;
-			}
-			else
-			{  return false; }
-		}
-
+		public event System.EventHandler OnLoginSuccess;
+		public event System.EventHandler OpenRegister;
+		public event System.EventHandler RecoverPwd;
     }
 }

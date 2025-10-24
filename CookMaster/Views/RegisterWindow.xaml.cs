@@ -28,7 +28,11 @@ namespace CookMaster.Views
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             
-            this.DataContextChanged += OnDataContextChanged;
+            this.Loaded += RegisterWindow_Loaded;
+            
+
+            
+            //this.DataContextChanged += OnDataContextChanged;
             
             /*if (DataContext is RegisterViewModel rw)
             {
@@ -36,17 +40,42 @@ namespace CookMaster.Views
                 rw.RequestClose += () => this.Close();
             }*/
         }
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+
+       
+
+        private void RegisterWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is RegisterViewModel vm)
+            {
+                vm.CloseRegister += Vm_CloseRegister;
+                vm.ConfirmMessage += Vm_ConfirmMessage;
+            }
+            
+        }
+
+        private void Vm_CloseRegister(object? sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void Vm_ConfirmMessage(object? sender, EventArgs e)
+        {
+            Close();
+            MessageBox.Show("Användare har lagts till.");
+            
+        }
+
+        /*private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
 
             if (e.NewValue is RegisterViewModel vm)
             {
-                
+
                 vm.RequestClose += () => this.Close();
 
                 vm.RequestMessage += msg => MessageBox.Show(msg, "Information");
             }
 
-        }
+        }*/
     }
 }
