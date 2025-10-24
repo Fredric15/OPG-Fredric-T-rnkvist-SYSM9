@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace CookMaster.ViewModel
 {
-    class RegisterViewModel : ViewModelBase
+    public class RegisterViewModel : ViewModelBase
     {
         private readonly UserManager _userManager;
         public event Action<string>? RequestMessage;
@@ -128,7 +128,7 @@ namespace CookMaster.ViewModel
             }
             else 
             {
-                ErrorText = "Lösenordet måste vara minst 8 tecken, innehålla minst en siffra samt ett specialtecken.";
+                ErrorText = "Lösenordet måste vara minst 8 tecken, samt innehålla en siffra och ett specialtecken.";
                 return false; 
             }
 
@@ -182,9 +182,10 @@ namespace CookMaster.ViewModel
         {
             _userManager.Register(UserName, Password, SelectedCountry, SelectedQ, SecurityAnswer);
             
+            RequestClose?.Invoke();
             RequestMessage?.Invoke("Ny användare registrerad.");
             
-            RequestClose?.Invoke();
+            
             
         }
         private void Cancel()

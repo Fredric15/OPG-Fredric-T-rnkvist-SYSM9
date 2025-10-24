@@ -62,8 +62,15 @@ namespace CookMaster.ViewModel
 	
 		public RelayCommand LoginCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
         public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
-        public RelayCommand ForgotPCommand => new RelayCommand(execute => Login(), canExecute => ForgotPassword());
+        public RelayCommand RecoverPwCommand => new RelayCommand(execute => RecoverPassword(), canExecute => ForgotPassword());
 
+        private void RecoverPassword()
+        {
+            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+			RecoverPwWindow recover = new RecoverPwWindow();
+            recover.DataContext = new RecoverPwViewModel(userManager);
+            recover.ShowDialog();
+        }
 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
 		private void Login()

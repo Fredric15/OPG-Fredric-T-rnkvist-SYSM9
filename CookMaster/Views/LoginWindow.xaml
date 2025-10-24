@@ -26,7 +26,7 @@
                 <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
                 <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
                 <Button Content="Registrera" Command="{Binding RegisterCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
-                <Button VerticalAlignment="Bottom" Command="{Binding ForgotPCommand}" Width="55" Margin="5">
+                <Button VerticalAlignment="Bottom" Command="{Binding RecoverPwCommand}" Width="55" Margin="5">
                     <TextBlock Text="Glömt lösenord" FontWeight="Bold" TextWrapping="WrapWithOverflow"/>
                 </Button>
             </StackPanel>
