@@ -14,6 +14,7 @@ namespace CookMaster.Managers
     {
         private User _currentUser;
         private readonly List<User> _users = new();
+
         public User CurrentUser
         {
             get => _currentUser;
@@ -22,6 +23,10 @@ namespace CookMaster.Managers
                 _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAuthenticated));
             }
         }
+        private string _twoFactorCode;
+        public string TwoFactorCode { get; set; }
+
+
 
         public UserManager()
         {

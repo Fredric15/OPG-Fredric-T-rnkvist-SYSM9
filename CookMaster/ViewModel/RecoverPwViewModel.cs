@@ -143,6 +143,8 @@ namespace CookMaster.ViewModel
             }
             else
             {
+                SequrityMatch = false; 
+                OnPropertyChanged();
                 ErrorText = "Ditt svar matchade ej.";
             }  
         }

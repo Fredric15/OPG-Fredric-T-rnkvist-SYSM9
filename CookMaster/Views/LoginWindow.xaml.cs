@@ -48,9 +48,21 @@ namespace CookMaster.Views
             window.ShowDialog();
         }
 
-        private void Vm_OnLoginSuccess(object? sender, EventArgs e)
+        private void Vm_OnLoginSuccess(object? sender, string msg)
         {
-            MessageBox.Show("Hejsan");
+            MessageBox.Show($"Verifikationskod: {msg}","You got mail!");
+            
+            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            
+            TwoFactorAuthWindow window = new TwoFactorAuthWindow();
+            window.DataContext = new TwoFactorAuthViewModel(userManager);
+            var success = window.ShowDialog();
+            if (success == true)
+            {
+                MessageBox.Show("Verification success!");
+
+            }else
+                MessageBox.Show("Verification failed.");
         }
     }
 }

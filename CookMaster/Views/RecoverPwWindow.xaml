@@ -24,7 +24,7 @@
             <TextBlock Text="{Binding Source={StaticResource UserManager},Path=CurrentUser.SecurityQuestion}" Margin="5,0,5,0"/>
             <TextBox Text="{Binding InputSecurityAnswer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5,0,5,0"/>
             <StackPanel Orientation="Horizontal">
-                <Button Content="Confirm" Width="50" Command="{Binding ConfirmAnswerCommand}" HorizontalAlignment="Left" Margin="5,0,5,5"/>
+                <Button Content="Confirm" Width="50" Command="{Binding ConfirmAnswerCommand,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="5,0,5,5"/>
                 <TextBlock Text="{Binding ErrorText}" Foreground="Red" Width="150"/>
             </StackPanel>
         </StackPanel>

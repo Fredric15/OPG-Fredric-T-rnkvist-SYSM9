@@ -14,8 +14,8 @@ namespace CookMaster.ViewModel
     public class RegisterViewModel : ViewModelBase
     {
         private readonly UserManager _userManager;
-        /*public event Action<string>? RequestMessage;
-        public event Action? RequestClose;*/
+        public event Action<string>? ConfirmNewUser;
+        public event Action? RequestClose;
         private string _userName;
         public string UserName
         {
@@ -177,16 +177,17 @@ namespace CookMaster.ViewModel
             
         }
 
-        public event System.EventHandler CloseRegister;
-        public event System.EventHandler ConfirmMessage;
+        /*public event EventHandler CloseRegister;
+        public event EventHandler ConfirmMessage;*/
         private void CreateUser()
         {
             _userManager.Register(UserName, Password, SelectedCountry, SelectedQ, SecurityAnswer);
-            ConfirmMessage?.Invoke(this, EventArgs.Empty);
+            RequestClose?.Invoke();
+            ConfirmNewUser?.Invoke("Ny användare har lagts till.");
         }
         private void Cancel()
         {
-            CloseRegister?.Invoke(this, EventArgs.Empty);
+            RequestClose?.Invoke();
         }
         
     }

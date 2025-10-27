@@ -1,0 +1,19 @@
+﻿<Window x:Class="CookMaster.Views.TwoFactorAuthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CookMaster.Views"
+        mc:Ignorable="d"
+        Title="TwoFactorAuthWindow" Height="150" Width="200">
+    <Grid>
+        <TextBlock Text="Verification code:" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="5,0,0,0"/>
+        <TextBox Text="{Binding UserInputCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Height="20" Width="75" Margin="0,0,5,0"/>
+        <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Content="Confirm" Command="{Binding ConfirmCommand}" Height="25" Width="50" VerticalAlignment="Bottom" Margin="5,0,5,5"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Height="25" Width="50"  VerticalAlignment="Bottom" Margin="0,0,5,5"/>
+            <Button Content="Get Code" Command="{Binding NewCodeCommand}" Height="25" Width="70" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
+        </StackPanel>
+    </Grid>
+
+</Window>

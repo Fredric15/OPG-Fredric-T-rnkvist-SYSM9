@@ -22,18 +22,19 @@ namespace CookMaster.Views
     /// </summary>
     public partial class RegisterWindow : Window
     {
-        public bool success {  get; set; }
+        
+
         public RegisterWindow()
         {
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            
-            this.Loaded += RegisterWindow_Loaded;
+
+            //this.Loaded += RegisterWindow_Loaded;
             
 
-            
-            //this.DataContextChanged += OnDataContextChanged;
-            
+
+            this.DataContextChanged += OnDataContextChanged;
+
             /*if (DataContext is RegisterViewModel rw)
             {
 
@@ -43,7 +44,7 @@ namespace CookMaster.Views
 
        
 
-        private void RegisterWindow_Loaded(object sender, RoutedEventArgs e)
+        /*private void RegisterWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.DataContext is RegisterViewModel vm)
             {
@@ -63,9 +64,9 @@ namespace CookMaster.Views
             Close();
             MessageBox.Show("Användare har lagts till.");
             
-        }
+        }*/
 
-        /*private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
 
             if (e.NewValue is RegisterViewModel vm)
@@ -73,9 +74,9 @@ namespace CookMaster.Views
 
                 vm.RequestClose += () => this.Close();
 
-                vm.RequestMessage += msg => MessageBox.Show(msg, "Information");
+                vm.ConfirmNewUser += msg => MessageBox.Show(msg, "Information");
             }
 
-        }*/
+        }
     }
 }

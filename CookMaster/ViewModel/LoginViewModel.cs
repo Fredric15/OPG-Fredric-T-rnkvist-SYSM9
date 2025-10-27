@@ -18,7 +18,6 @@ namespace CookMaster.ViewModel
     {
 		private readonly UserManager _userManager;
 	
-		
 		private string _username;
 
 		public string Username
@@ -52,9 +51,13 @@ namespace CookMaster.ViewModel
 				OnPropertyChanged();
 			}
 		}
+		private string _twoFactorCode { get; set; }
 
-		public LoginViewModel(UserManager userManager)
+		Random rnd;
+
+        public LoginViewModel(UserManager userManager)
 		{
+			rnd = new Random();
 			_userManager = userManager;
 			
 		}
@@ -66,7 +69,7 @@ namespace CookMaster.ViewModel
 
         private void RecoverPassword()
         {
-            RecoverPwd?.Invoke(this, System.EventArgs.Empty);
+            RecoverPwd?.Invoke(this, EventArgs.Empty);
 		}
 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
@@ -74,7 +77,8 @@ namespace CookMaster.ViewModel
 		{
 			if (_userManager.Login(Username,Password))
 			{
-				OnLoginSuccess?.Invoke(this, System.EventArgs.Empty);
+                _userManager.TwoFactorCode = $"{rnd.Next(100000, 999999)}";
+                OnLoginSuccess?.Invoke(this, _userManager.TwoFactorCode);
 			}
 			else
 			{ 
@@ -83,11 +87,11 @@ namespace CookMaster.ViewModel
 		}
 		private void Register()
 		{
-			OpenRegister?.Invoke(this, System.EventArgs.Empty);
+			OpenRegister?.Invoke(this, EventArgs.Empty);
 		}
 
-		public event System.EventHandler OnLoginSuccess;
-		public event System.EventHandler OpenRegister;
-		public event System.EventHandler RecoverPwd;
+		public event EventHandler<string> OnLoginSuccess;
+		public event EventHandler OpenRegister;
+		public event EventHandler RecoverPwd;
     }
 }
