@@ -13,7 +13,7 @@ namespace CookMaster.Managers
     public class UserManager : ViewModelBase
     {
         private User _currentUser;
-        private readonly List<User> _users = new();
+        public readonly List<User> _users = new();
 
         public User CurrentUser
         {
@@ -36,8 +36,10 @@ namespace CookMaster.Managers
 
         private void SeedDefaultUsers()
         {
-            _users.Add(new User {UserName = "admin", Password = "password", Country = "Sverige"});
-            _users.Add(new User { UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vad heter du?", SecurityAnswer = "Fredric" });
+
+            _users.Add(new User {UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vad heter du?", SecurityAnswer = "Fredric" });
+            _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vad heter du?", SecurityAnswer = "Fredric" });
+
         }
 
         public bool IsAuthenticated => CurrentUser != null;

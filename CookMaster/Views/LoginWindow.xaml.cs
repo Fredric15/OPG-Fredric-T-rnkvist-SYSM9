@@ -51,15 +51,20 @@ namespace CookMaster.Views
         private void Vm_OnLoginSuccess(object? sender, string msg)
         {
             MessageBox.Show($"Verifikationskod: {msg}","You got mail!");
-            
+            //var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            
+            ;
             TwoFactorAuthWindow window = new TwoFactorAuthWindow();
             window.DataContext = new TwoFactorAuthViewModel(userManager);
             var success = window.ShowDialog();
             if (success == true)
             {
                 MessageBox.Show("Verification success!");
+                
+                RecipeListWindow recipeList = new RecipeListWindow();
+                recipeList.DataContext = new RecipeListViewModel(userManager);
+                recipeList.Show();
+                this.Close();
 
             }else
                 MessageBox.Show("Verification failed.");
