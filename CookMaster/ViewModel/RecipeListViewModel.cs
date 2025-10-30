@@ -14,7 +14,7 @@ namespace CookMaster.ViewModel
 {
     public class RecipeListViewModel : ViewModelBase
     {
-        public event Action<string> ErrorMessage;
+        
         private readonly UserManager _userManager;
         private readonly RecipeManager _recipeManager;
         public ObservableCollection<Recipe> FilteredRecipeList { get; set; }
@@ -41,10 +41,16 @@ namespace CookMaster.ViewModel
         }
 
         public string FormattedTime => _dateTime.ToString("HH:mm:ss");
-        
+
+        public ICommand UserDetailsCommand { get;}
+        public ICommand AddCommand { get;}
         public ICommand RemoveCommand { get;}
+        public ICommand DetailsCommand { get;}
+        public ICommand InfoCommand { get;}
+        public ICommand SignOutCommand {  get;}
 
-
+        public event Action<string> ErrorMessage;
+        public event Action RequestUserDetails;
         public RecipeListViewModel(UserManager userManager)
         {
             _userManager = userManager;
@@ -53,8 +59,39 @@ namespace CookMaster.ViewModel
             FilteredRecipeList.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
             FilteredRecipeList.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
             ShowRecipes();
+            UserDetailsCommand = new RelayCommand(execute => UserDetails());
+            AddCommand = new RelayCommand(execute => AddRecipes());
             RemoveCommand = new RelayCommand(execute => RemoveRecipes());
+            DetailsCommand = new RelayCommand(execute => RecipeDetails());
+            InfoCommand = new RelayCommand(execute => CookMasterInfo());
+            SignOutCommand = new RelayCommand(execute => SignOut());
         }
+
+        private void SignOut()
+        {
+            _userManager.CurrentUser = null;
+        }
+
+        private void CookMasterInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RecipeDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddRecipes()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UserDetails()
+        {
+            RequestUserDetails?.Invoke();
+        }
+
         public void ShowRecipes()
         {
             var filtrerade = FilteredRecipeList.Where(recipe => recipe.CreatedBy == _userManager.CurrentUser);
@@ -65,7 +102,7 @@ namespace CookMaster.ViewModel
 
         
 
-        public void RemoveRecipes() 
+        private void RemoveRecipes() 
         { 
             if(SelectedRecipe != null)
             {

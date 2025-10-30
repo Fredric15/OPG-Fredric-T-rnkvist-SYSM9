@@ -15,7 +15,7 @@ namespace CookMaster.ViewModel
     {
         private readonly UserManager _userManager;
         public event Action<string>? ConfirmNewUser;
-        public event Action? RequestClose;
+        public event Action RequestClose;
         private string _userName;
         public string UserName
         {
@@ -102,11 +102,11 @@ namespace CookMaster.ViewModel
             
         }
         
-        public RelayCommand NewUserCommand => new RelayCommand(execute => CreateUser(), canExecute => InputBoxChecked());
+        public RelayCommand NewUserCommand => new RelayCommand(execute => CreateUser(), canExecute => AllInputBoxesChecked());
         public RelayCommand CancelCommand => new RelayCommand(execute => Cancel());
-        private bool InputBoxChecked()
+        protected virtual bool AllInputBoxesChecked()
         {
-            if (!string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPw) && !string.IsNullOrWhiteSpace(SelectedCountry) && !string.IsNullOrWhiteSpace(SelectedQ) && !string.IsNullOrWhiteSpace(SecurityAnswer) && CheckUsername(UserName) && MatchingPw() && ValidPw())
+            if (!string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPw) && !string.IsNullOrWhiteSpace(SelectedCountry) && !string.IsNullOrWhiteSpace(SelectedQ) && !string.IsNullOrWhiteSpace(SecurityAnswer) && CheckUsername(UserName) && MatchingPwd() && ValidPwd())
             {
                 
                 return true;
@@ -120,35 +120,21 @@ namespace CookMaster.ViewModel
             
         }
 
-        private bool ValidPw()
+        protected virtual bool ValidPwd()
         {
-            if (Password.Length >= 8 && CheckSpecial(Password) && Password.Any(char.IsDigit))
+            if (_userManager.ValidatePassword(ConfirmPw))
             {
                 return true;
             }
-            else 
+            else
             {
                 ErrorText = "Lösenordet måste vara minst 8 tecken, samt innehålla en siffra och ett specialtecken.";
-                return false; 
+                return false;
             }
 
         }
 
-        static bool CheckSpecial(string password)
-        {
-            string specialCharacters = "!@#$%^&*()-_=+[{]};:’\"|\\,<.>/?";
-
-            foreach (char c in password)
-            {
-                if (specialCharacters.Contains(c))
-                {
-                    return true;
-                }
-            }
-            return false;
-
-        }
-        private bool MatchingPw()
+        protected virtual bool MatchingPwd()
         {
             if (Password == ConfirmPw)
             {
@@ -162,9 +148,9 @@ namespace CookMaster.ViewModel
             }
         }
 
-        private bool CheckUsername(string username)
+        protected virtual bool CheckUsername(string username)
         {
-            if (!_userManager.CheckUsername(username))
+            if (!_userManager.CheckExistingUsername(username))
             {
                 
                 return true;
@@ -177,8 +163,8 @@ namespace CookMaster.ViewModel
             
         }
 
-        /*public event EventHandler CloseRegister;
-        public event EventHandler ConfirmMessage;*/
+        //public event EventHandler CloseRegister;
+        //public event EventHandler ConfirmMessage;
         private void CreateUser()
         {
             _userManager.Register(UserName, Password, SelectedCountry, SelectedQ, SecurityAnswer);

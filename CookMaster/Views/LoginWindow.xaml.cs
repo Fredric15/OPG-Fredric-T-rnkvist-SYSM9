@@ -42,9 +42,9 @@ namespace CookMaster.Views
 
         private void Vm_OpenRegister(object? sender, EventArgs e)
         {
-            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            //var userManager = (UserManager)Application.Current.Resources["UserManager"];
             RegisterWindow window = new RegisterWindow();
-            window.DataContext = new RegisterViewModel(userManager);
+            //window.DataContext = new RegisterViewModel(userManager);
             window.ShowDialog();
         }
 
@@ -53,7 +53,7 @@ namespace CookMaster.Views
             MessageBox.Show($"Verifikationskod: {msg}","You got mail!");
             //var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            ;
+            
             TwoFactorAuthWindow window = new TwoFactorAuthWindow();
             window.DataContext = new TwoFactorAuthViewModel(userManager);
             var success = window.ShowDialog();

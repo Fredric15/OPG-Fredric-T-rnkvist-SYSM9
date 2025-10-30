@@ -24,7 +24,8 @@ namespace CookMaster.Views
         public RecipeListWindow()
         {
             InitializeComponent();
-
+            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            this.DataContext = new RecipeListViewModel(userManager);
             this.Loaded += RecipeListWindow_Loaded;
             
             
@@ -36,8 +37,19 @@ namespace CookMaster.Views
             if(this.DataContext is RecipeListViewModel rvm)
             {
                 rvm.ErrorMessage += msg => MessageBox.Show(msg, "Error");
+                rvm.RequestUserDetails += Rvm_RequestUserDetails;
             }
         }
 
+        private void Rvm_RequestUserDetails()
+        {
+            //var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            //UserDetailsWindow userDetails = new UserDetailsWindow();
+            //userDetails.DataContext = new UserDetailsViewModel(userManager);
+
+            UserDetailsWindow userDetails = new UserDetailsWindow();
+            this.Close();
+            userDetails.Show();
+        }
     }
 }

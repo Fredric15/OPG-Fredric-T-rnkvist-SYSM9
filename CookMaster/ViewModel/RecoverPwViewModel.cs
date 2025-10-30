@@ -117,7 +117,7 @@ namespace CookMaster.ViewModel
             }
             else
             {
-                ErrorText = "Ej korrekt format på pw";
+                ErrorText = "Ej korrekt format på password";
             }
             
             

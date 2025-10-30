@@ -7,19 +7,20 @@
         mc:Ignorable="d"
         Title="RegisterWindow" Height="400" Width="400" ResizeMode="NoResize">
     <StackPanel>
-        <TextBlock Text="Username:" Width="Auto"/>
-        <TextBox Text="{Binding UserName ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="Password:" Width="Auto"/>
-        <TextBox Text="{Binding Password ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="Bekräfta Password:" Width="Auto"/>
-        <TextBox Text="{Binding ConfirmPw ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="Välj land:" Width="Auto"/>
-        <ComboBox ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="Välj säkerhetsfråga:" Width="auto"/>
-        <ComboBox ItemsSource="{Binding SecurityQ}" SelectedItem="{Binding SelectedQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Text="{Binding SecurityAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Content="Registrera ny användare" Command="{Binding NewUserCommand}"/>
-        <Button Content="Avbryt" Width="auto" Command="{Binding CancelCommand}"/>
-        <TextBlock Text="{Binding ErrorText}" TextWrapping="Wrap" Foreground="Red" Width="auto"/>
+        <TextBlock Text="Username:" Width="Auto" Margin="5,5,5,0"/>
+        <TextBox Text="{Binding UserName ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <TextBlock Text="Password:" Width="Auto" Margin="5,5,5,0"/>
+        <TextBox Text="{Binding Password ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <TextBlock Text="Bekräfta Password:" Width="Auto" Margin="5,5,5,0"/>
+        <TextBox Text="{Binding ConfirmPw ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <TextBlock Text="Välj land:" Width="Auto" Margin="5,5,5,0"/>
+        <ComboBox ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <TextBlock Text="Välj säkerhetsfråga:" Width="auto" Margin="5,5,5,0"/>
+        <ComboBox ItemsSource="{Binding SecurityQ}" SelectedItem="{Binding SelectedQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <TextBlock Text="Ange ditt svar:" Margin="5,5,5,0"/>
+        <TextBox Text="{Binding SecurityAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <Button Content="Registrera ny användare" Command="{Binding NewUserCommand}" Margin="5,5,5,0"/>
+        <Button Content="Avbryt" Width="auto" Command="{Binding CancelCommand}" Margin="5,0,5,0"/>
+        <TextBlock Text="{Binding ErrorText}" TextWrapping="Wrap" Foreground="Red" Width="auto" Margin="5,5,5,0"/>
     </StackPanel>
 </Window>

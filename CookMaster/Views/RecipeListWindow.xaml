@@ -12,8 +12,8 @@
             <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Button Content="{Binding Source={StaticResource UserManager}, Path=CurrentUser.UserName}" FontWeight="Bold" Background="Transparent" Height="30" Width="75" Margin="5" HorizontalAlignment="Left"/>
-        <Button Content="Sign out" FontWeight="Bold" Command="{Binding SignOutCommand}"  HorizontalAlignment="Right" Width="75" Height="30" Margin="5" />
+        <Button Content="{Binding Source={StaticResource UserManager}, Path=CurrentUser.UserName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Command="{Binding UserDetailsCommand}" FontWeight="Bold" Background="Transparent" Height="30" Width="75" Margin="5" HorizontalAlignment="Left"/>
+        <Button Content="Sign out" FontWeight="Bold" Command="{Binding SignOutCommand}" HorizontalAlignment="Right" Width="75" Height="30" Margin="5" />
         
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
             <Button
@@ -30,7 +30,7 @@
                 Width="70"
                 Height="30"
                 Content="Details"
-                Command="{Binding Details}"/>
+                Command="{Binding DetailsCommand}"/>
             <Button 
                 Content="Info"
                 Width="70"
@@ -55,16 +55,17 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="4*" Header="Titel" Binding="{Binding Title}" />
-                    <DataGridTextColumn Width="4*" Header="Created By:" Binding="{Binding CreatedBy.UserName}"/>
+                    <DataGridTextColumn Width="4*" Header="Created By:" Binding="{Binding CreatedBy.UserName, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Width="1*" Header="Category" Binding="{Binding Category}"/>
                 </DataGrid.Columns>
 
             </DataGrid>
 
             <StackPanel Grid.Column="1">
-                <Label Content="Filtrera efter kategori:" />
+                <Label Content="Filter by Category:" />
                 <ComboBox ItemsSource="{Binding SelectedItem.Category, UpdateSourceTrigger=PropertyChanged}"/>
-                
+                <Label Content="Sort by date:" />
+                <ComboBox ItemsSource="{Binding SelectedItem.Category, UpdateSourceTrigger=PropertyChanged}"/>                
             </StackPanel>
 
         </Grid>

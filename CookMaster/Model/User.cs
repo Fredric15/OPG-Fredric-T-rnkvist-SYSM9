@@ -9,33 +9,42 @@ namespace CookMaster.Model
 {
     public class User
     {
-		private string userName;
+		private string _userName;
 
 		public string UserName
 		{
-			get { return userName; }
-			set { userName = value; }
+			get { return _userName; }
+			set { _userName = value; }
 		}
 		
-		private string password;
+		private string _password;
 		
 		public string Password
 		{
-			get { return password; }
-			set { password = value; }
+			get { return _password; }
+			set { _password = value; }
 		}
 
-        private string country;
-
-		public string Country
+        private string _country;
+        public string Country
 		{
-			get { return country; }
-			set { country = value; }
+			get { return _country; }
+			set { _country = value; }
 		}
 
-		public string SecurityQuestion { get; set; }
-
-		public string SecurityAnswer { get; set; }
+        private string _securityQuestion;
+        public string SecurityQuestion
+		{
+			get { return _securityQuestion; }
+			set { _securityQuestion = value; }
+		}
+        
+		private string _securityAnswer;
+        public string SecurityAnswer
+		{
+			get { return _securityAnswer; }
+			set { _securityAnswer = value; }
+		}
 
 
         public void ValidateLogin()
@@ -46,8 +55,25 @@ namespace CookMaster.Model
 		public void ChangePassword()
 		{ }
 
-		public void UpdateDetails()
-		{ }
+		public void UpdateUsername(string username)
+		{ 
+			UserName = username;
+		}
+        public void UpdatePassword(string password)
+        {
+            
+            Password = password;
+
+        }
+		public void UpdateCountry(string country)
+		{
+			Country = country;
+		}
+        public void UpdateSecurity(string securityQ, string securityA)
+        {
+            SecurityQuestion = securityQ;
+            SecurityAnswer = securityA;
+        }
     }
 
 	

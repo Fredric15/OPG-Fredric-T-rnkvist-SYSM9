@@ -14,6 +14,8 @@ namespace CookMaster.Managers
     {
         private User _currentUser;
         public readonly List<User> _users = new();
+        public List<String> Countries { get; set; } = new List<string> { "Sverige", "Finland", "Norge", "Danmark", "Finland" };
+        public List<String> SecurityQ { get; set; } = new List<string> { "Vilken var din första skola?", "Vad heter din mormor?", "Vilket är ditt favoritlag?" };
 
         public User CurrentUser
         {
@@ -37,8 +39,8 @@ namespace CookMaster.Managers
         private void SeedDefaultUsers()
         {
 
-            _users.Add(new User {UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vad heter du?", SecurityAnswer = "Fredric" });
-            _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vad heter du?", SecurityAnswer = "Fredric" });
+            _users.Add(new User {UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
+            _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
 
         }
 
@@ -64,8 +66,11 @@ namespace CookMaster.Managers
             
         }
 
-        public bool CheckUsername(string username)
+        public bool CheckExistingUsername(string username) 
         {
+            //Kontrollerar upptagna användarnamn.
+            //Returnerar True om upptaget annars falskt
+
             foreach (var user in _users)
             {
                 if (user.UserName == username)
@@ -92,7 +97,7 @@ namespace CookMaster.Managers
             if(CurrentUser.UserName == username)
             {  CurrentUser.Password = password;}
         }
-        public bool ValidatePassword(string password)
+        public virtual bool ValidatePassword(string password)
         {
             bool validPw = false;
             bool ContainsSpecial = false;
