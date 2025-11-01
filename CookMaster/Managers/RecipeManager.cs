@@ -12,36 +12,66 @@ namespace CookMaster.Managers
     public class RecipeManager : ViewModelBase
     {   
         private readonly UserManager _userManager;
-        public List<Recipe>? AllRecipes { get; set; }
-        public ObservableCollection<Recipe> FilteredRecipes { get; set; }
-        
+        private ObservableCollection<Recipe> _allRecipes;
+
+        public ObservableCollection<Recipe> AllRecipes
+        {
+            get { return _allRecipes; }
+            set { _allRecipes = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<Recipe> _userFilteredRecipe;
+
+        public ObservableCollection<Recipe> UserFilteredRecipe
+        {
+            get { return _userFilteredRecipe; }
+            set 
+            { 
+                _userFilteredRecipe = value; 
+                OnPropertyChanged();
+            }
+        }
 
 
+
+
+        public RecipeManager()//UserManager userManager)
+        {
+            //_userManager = userManager;
+            AllRecipes = new ObservableCollection<Recipe>();
+            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now });
+        }
         public RecipeManager(UserManager userManager)
         {
             _userManager = userManager;
-            //AllRecipes = new List<Recipe>();
-            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now });
-            //SeedDefaultRecipes();
+
         }
 
-        private void SeedDefaultRecipes()
+        /*public void SeedDefaultRecipes()
         {
-            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0] , Date = DateTime.Now});
-            //AllRecipes.Add(new Recipe {Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now});
-        }
+            
+            AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0] , Date = DateTime.Now});
+            AllRecipes.Add(new Recipe {Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now});
+        }*/
 
         public void AddRecipe(Recipe recipe)
         { }
         public void RemoveRecipe(Recipe recipe) 
-        { }
-        public void GetAllRecipes()
-        { }
-        public void GetByUser(User user)
+        { 
+            AllRecipes.Remove(recipe);
+
+        }
+        public ObservableCollection<Recipe> GetAllRecipes()
+        {
+            var allRecipes = AllRecipes;
+
+            return UserFilteredRecipe = new ObservableCollection<Recipe>(allRecipes);
+        }
+        public ObservableCollection<Recipe> GetByUser(User user)
         {
             var filtrerade = AllRecipes.Where(recipe => recipe.CreatedBy == user);
-            FilteredRecipes = new ObservableCollection<Recipe>(filtrerade);
+            return UserFilteredRecipe = new ObservableCollection<Recipe>(filtrerade);
 
         }
         public void Filter(string criteria)

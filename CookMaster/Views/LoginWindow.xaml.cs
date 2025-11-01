@@ -62,7 +62,7 @@ namespace CookMaster.Views
                 MessageBox.Show("Verification success!");
                 
                 RecipeListWindow recipeList = new RecipeListWindow();
-                recipeList.DataContext = new RecipeListViewModel(userManager);
+                //recipeList.DataContext = new RecipeListViewModel(userManager);
                 recipeList.Show();
                 this.Close();
 

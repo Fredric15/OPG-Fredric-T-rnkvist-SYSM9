@@ -51,14 +51,11 @@ namespace CookMaster.ViewModel
 				OnPropertyChanged();
 			}
 		}
-		private string _twoFactorCode { get; set; }
-
-		Random rnd;
+		
 
         public LoginViewModel(UserManager userManager)
 		{
-			rnd = new Random();
-			_userManager = userManager;
+            _userManager = userManager;
 			
 		}
 
@@ -75,6 +72,8 @@ namespace CookMaster.ViewModel
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
 		private void Login()
 		{
+            Random rnd = new Random();
+            
 			if (_userManager.Login(Username,Password))
 			{
                 _userManager.TwoFactorCode = $"{rnd.Next(100000, 999999)}";

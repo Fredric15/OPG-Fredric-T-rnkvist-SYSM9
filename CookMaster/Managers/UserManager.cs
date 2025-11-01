@@ -12,11 +12,9 @@ namespace CookMaster.Managers
 {
     public class UserManager : ViewModelBase
     {
-        private User _currentUser;
         public readonly List<User> _users = new();
-        public List<String> Countries { get; set; } = new List<string> { "Sverige", "Finland", "Norge", "Danmark", "Finland" };
-        public List<String> SecurityQ { get; set; } = new List<string> { "Vilken var din första skola?", "Vad heter din mormor?", "Vilket är ditt favoritlag?" };
 
+        private User _currentUser;
         public User CurrentUser
         {
             get => _currentUser;
@@ -25,10 +23,13 @@ namespace CookMaster.Managers
                 _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAuthenticated));
             }
         }
+
         private string _twoFactorCode;
-        public string TwoFactorCode { get; set; }
-
-
+        public string TwoFactorCode
+        {
+            get { return _twoFactorCode; }
+            set { _twoFactorCode = value; }
+        }
 
         public UserManager()
         {
@@ -41,6 +42,7 @@ namespace CookMaster.Managers
 
             _users.Add(new User {UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
             _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
+            _users.Add(new User { UserName = "admin", Password = "password", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
 
         }
 

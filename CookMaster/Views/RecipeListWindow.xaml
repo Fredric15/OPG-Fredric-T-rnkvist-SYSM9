@@ -49,8 +49,8 @@
                 IsReadOnly="True"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
-                ItemsSource="{Binding FilterRecipeList}"
-                SelectedItem="{Binding SelectedRecipe}">
+                ItemsSource="{Binding UserFilteredRecipeList}"
+                SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}">
 
 
                 <DataGrid.Columns>
