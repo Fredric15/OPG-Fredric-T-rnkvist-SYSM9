@@ -56,7 +56,9 @@ namespace CookMaster.Managers
         }*/
 
         public void AddRecipe(Recipe recipe)
-        { }
+        {
+            AllRecipes.Add(recipe);
+        }
         public void RemoveRecipe(Recipe recipe) 
         { 
             AllRecipes.Remove(recipe);

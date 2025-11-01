@@ -26,8 +26,26 @@ namespace CookMaster.Views
             InitializeComponent();
             var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            this.DataContext = new AddRecipeViewModel();
+            this.DataContext = new AddRecipeViewModel(userManager,recipeManager);
+
+            this.Loaded += AddRecipeWindow_Loaded;
+        }
+
+        private void AddRecipeWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is AddRecipeViewModel viewModel)
+            {
+                viewModel.ConfirmAddRecipe += msg => MessageBox.Show(msg, "Information");
+                viewModel.RequestClose += ViewModel_RequestClose;
             
+            }
+        }
+
+        private void ViewModel_RequestClose()
+        {
+            RecipeListWindow recipeListWindow = new RecipeListWindow();
+            recipeListWindow.Show();
+            this.Close();
         }
     }
 }
