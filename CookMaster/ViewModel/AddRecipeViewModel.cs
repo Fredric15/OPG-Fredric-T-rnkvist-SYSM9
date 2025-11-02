@@ -14,6 +14,7 @@ namespace CookMaster.ViewModel
     {
         private readonly UserManager _userManager;
         private readonly RecipeManager _recipeManager;
+		private readonly Recipe _recipe;
         private string _inputTitle;
 
 		public string InputTitle
@@ -83,6 +84,20 @@ namespace CookMaster.ViewModel
 			AddRecipeCommand = new RelayCommand(execute => AddRecipe());
 			CancelCommand = new RelayCommand(execute => Cancel());
         }
+		public AddRecipeViewModel(UserManager usermanager, RecipeManager recipemanager, Recipe recipe)
+		{
+            _userManager = usermanager;
+            _recipeManager = recipemanager;
+            _recipe = recipe;
+
+			InputTitle = recipe.Title;
+			InputIngredients = recipe.Ingredients;
+			InputInstructions = recipe.Instructions;
+			SelectedCategory = recipe.Category;
+
+            AddRecipeCommand = new RelayCommand(execute => AddRecipe());
+            CancelCommand = new RelayCommand(execute => Cancel());
+        }
 
         private void Cancel()
         {
@@ -91,68 +106,75 @@ namespace CookMaster.ViewModel
 
         private void AddRecipe()
         {
-			switch (SelectedCategory)
+			if(!string.IsNullOrWhiteSpace(InputTitle) && !string.IsNullOrWhiteSpace(InputIngredients) && !string.IsNullOrWhiteSpace(InputInstructions) && SelectedCategory != null)
 			{
-				case "Kött":
-					Recipe köttrecipe = new KöttRecipe
-					{
-						Title = InputTitle,
-						Ingredients = InputIngredients,
-						Instructions = InputInstructions,
-						Category = SelectedCategory,
-						CreatedBy = _userManager.CurrentUser,
-						Date = DateTime.Now
-					};
-					_recipeManager.AddRecipe(köttrecipe);
-                    ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
-                    RequestClose?.Invoke();
-					break;
-				
-				case "Fisk och Skaldjur":
-                    Recipe fiskrecipe = new FiskochSkaldjurRecipe
-                    {
-                        Title = InputTitle,
-                        Ingredients = InputIngredients,
-                        Instructions = InputInstructions,
-                        Category = SelectedCategory,
-                        CreatedBy = _userManager.CurrentUser,
-                        Date = DateTime.Now
-                    };
-                    _recipeManager.AddRecipe(fiskrecipe);
-                    ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
-                    RequestClose?.Invoke();
-                    break;
-				case "Vegetariskt":
-                    Recipe vegrecipe = new VegetarisktRecipe
-                    {
-                        Title = InputTitle,
-                        Ingredients = InputIngredients,
-                        Instructions = InputInstructions,
-                        Category = SelectedCategory,
-                        CreatedBy = _userManager.CurrentUser,
-                        Date = DateTime.Now
-                    };
-                    _recipeManager.AddRecipe(vegrecipe);
-                    ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
-                    RequestClose?.Invoke();
-                    break;
-				
-				case "Dessert":
-					Recipe dessertrecipe = new DessertRecipe
-                    {
-                        Title = InputTitle,
-                        Ingredients = InputIngredients,
-                        Instructions = InputInstructions,
-                        Category = SelectedCategory,
-                        CreatedBy = _userManager.CurrentUser,
-                        Date = DateTime.Now
-                    };
-                    _recipeManager.AddRecipe(dessertrecipe);
-                    ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
-                    RequestClose?.Invoke();
-                    break;
-				default:
-					break;
+				switch (SelectedCategory)
+				{
+					case "Kött":
+						Recipe köttrecipe = new KöttRecipe
+						{
+							Title = InputTitle,
+							Ingredients = InputIngredients,
+							Instructions = InputInstructions,
+							Category = SelectedCategory,
+							CreatedBy = _userManager.CurrentUser,
+							Date = DateTime.Now
+						};
+						_recipeManager.AddRecipe(köttrecipe);
+						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
+						RequestClose?.Invoke();
+						break;
+
+					case "Fisk och Skaldjur":
+						Recipe fiskrecipe = new FiskochSkaldjurRecipe
+						{
+							Title = InputTitle,
+							Ingredients = InputIngredients,
+							Instructions = InputInstructions,
+							Category = SelectedCategory,
+							CreatedBy = _userManager.CurrentUser,
+							Date = DateTime.Now
+						};
+						_recipeManager.AddRecipe(fiskrecipe);
+						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
+						RequestClose?.Invoke();
+						break;
+					case "Vegetariskt":
+						Recipe vegrecipe = new VegetarisktRecipe
+						{
+							Title = InputTitle,
+							Ingredients = InputIngredients,
+							Instructions = InputInstructions,
+							Category = SelectedCategory,
+							CreatedBy = _userManager.CurrentUser,
+							Date = DateTime.Now
+						};
+						_recipeManager.AddRecipe(vegrecipe);
+						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
+						RequestClose?.Invoke();
+						break;
+
+					case "Dessert":
+						Recipe dessertrecipe = new DessertRecipe
+						{
+							Title = InputTitle,
+							Ingredients = InputIngredients,
+							Instructions = InputInstructions,
+							Category = SelectedCategory,
+							CreatedBy = _userManager.CurrentUser,
+							Date = DateTime.Now
+						};
+						_recipeManager.AddRecipe(dessertrecipe);
+						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
+						RequestClose?.Invoke();
+						break;
+					default:
+						break;
+				}
+			} 
+			else
+			{
+				ErrorText = "Alla fält måste vara ifyllda.";
 			}
 		}
     }

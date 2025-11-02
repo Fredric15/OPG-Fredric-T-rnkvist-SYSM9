@@ -49,6 +49,7 @@ namespace CookMaster.ViewModel
         public ICommand InfoCommand { get;}
         public ICommand SignOutCommand {  get;}
 
+        public event Action RequestRecipeDetails;
         public event Action RequestAddRecipe;
         public event Action<string> InfoMessage;
         public event Action RequestUserDetails;
@@ -88,8 +89,8 @@ namespace CookMaster.ViewModel
             {
                 return;
             }
-            _recipeManager.AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            _recipeManager.AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+            _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+            _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
         }
 
         private void SignOut()
@@ -110,7 +111,20 @@ namespace CookMaster.ViewModel
 
         private void RecipeDetails()
         {
-            throw new NotImplementedException();
+            if (SelectedRecipe != null)
+            {
+
+                _recipeManager.SelectedRecipe = SelectedRecipe;
+                RequestRecipeDetails?.Invoke();
+                SelectedRecipe = null;
+                
+
+            }
+            else
+            {
+                InfoMessage?.Invoke("Du måste markera ett recept.");
+
+            }
         }
 
         private void AddRecipes()
@@ -148,7 +162,6 @@ namespace CookMaster.ViewModel
             {
                 InfoMessage?.Invoke("Du måste markera ett recept.");
             }
-        
         }
         public void FilterRecipes()
         { }

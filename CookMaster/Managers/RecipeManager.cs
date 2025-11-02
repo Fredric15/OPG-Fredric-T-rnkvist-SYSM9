@@ -14,6 +14,19 @@ namespace CookMaster.Managers
         private readonly UserManager _userManager;
         private ObservableCollection<Recipe> _allRecipes;
 
+        private Recipe _selectedRecipe;
+
+        public Recipe SelectedRecipe
+        {
+            get { return _selectedRecipe; }
+            set 
+            { 
+                _selectedRecipe = value; 
+                OnPropertyChanged();
+            }
+        }
+
+
         public ObservableCollection<Recipe> AllRecipes
         {
             get { return _allRecipes; }
@@ -79,6 +92,9 @@ namespace CookMaster.Managers
         public void Filter(string criteria)
         { }
         public void UpdateRecipe(Recipe recipe)
-        { }
+        {
+            
+        
+        }
     }
 }

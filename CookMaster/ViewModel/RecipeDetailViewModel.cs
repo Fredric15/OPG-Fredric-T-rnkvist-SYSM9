@@ -1,0 +1,133 @@
+﻿using CookMaster.Managers;
+using CookMaster.Model;
+using MVVM_KlonaMIg.MVVM;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+
+namespace CookMaster.ViewModel
+{
+    public class RecipeDetailViewModel : ViewModelBase
+    {
+        private readonly RecipeManager _recipeManager;
+        private readonly Recipe _recipe;
+
+        private string _editTitle;
+
+        public string EditTitle
+        {
+            get { return _editTitle; }
+            set 
+            { 
+                _editTitle = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _editIngredients;
+
+        public string EditIngredients
+        {
+            get { return _editIngredients; }
+            set 
+            { 
+                _editIngredients = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _editInstructions;
+
+        public string EditInstructions
+        {
+            get { return _editInstructions; }
+            set 
+            { 
+                _editInstructions = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _editCategory;
+
+        public string EditCategory
+        {
+            get { return _editCategory; }
+            set 
+            { 
+                _editCategory = value; 
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
+        private bool _editable = false;
+
+
+        public bool Editable
+        {
+            get { return _editable; }
+            set 
+            { 
+                _editable = value; 
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> Category { get; set; } = new List<string> { "Kött", "Fisk och Skaldjur", "Vegetariskt", "Dessert" };
+
+        public ICommand SaveCommand { get;}
+        public ICommand EditCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand CopyCommand { get; }
+
+        public event Action<string> RecipeSaved;
+        public event Action RequestClose;
+        public event Action RequestCopy;
+        public RecipeDetailViewModel(RecipeManager recipemanager ,Recipe recipe)
+        {
+            _recipeManager = recipemanager;
+            _recipe = recipe;
+
+            EditTitle = recipe.Title!;
+            EditIngredients = recipe.Ingredients!;
+            EditInstructions = recipe.Instructions!;
+            EditCategory = recipe.Category!;
+
+
+
+            SaveCommand = new RelayCommand(execute => SaveDetails());
+            EditCommand = new RelayCommand(execute => EditDetails());
+            CancelCommand = new RelayCommand(execute => CancelDetails());
+            CopyCommand = new RelayCommand(execute => CopyDetails());
+        }
+
+        private void CopyDetails()
+        {
+            RequestCopy?.Invoke();
+        }
+
+        private void CancelDetails()
+        {
+            RequestClose?.Invoke();
+        }
+
+        private void EditDetails()
+        {
+            Editable = true;
+        }
+
+        private void SaveDetails()
+        {
+            _recipe.Title = EditTitle;
+            _recipe.Ingredients = EditIngredients;
+            _recipe.Instructions = EditInstructions;
+            _recipe.Category = EditCategory;
+            RecipeSaved?.Invoke("Dina ändringar är sparade.");
+            RequestClose?.Invoke();
+        }
+    }
+}

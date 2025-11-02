@@ -37,11 +37,19 @@ namespace CookMaster.Views
         {
             if(this.DataContext is RecipeListViewModel rvm)
             {
+                rvm.RequestRecipeDetails += Rvm_RequestRecipeDetails;
                 rvm.RequestAddRecipe += Rvm_RequestAddRecipe;
                 rvm.InfoMessage += msg => MessageBox.Show(msg, "Info");
                 rvm.RequestUserDetails += Rvm_RequestUserDetails;
                 rvm.LogOut += Rvm_LogOut;
             }
+        }
+
+        private void Rvm_RequestRecipeDetails()
+        {
+            RecipeDetailWindow recipedetails = new RecipeDetailWindow();
+            this.Close();
+            recipedetails.Show();
         }
 
         private void Rvm_RequestAddRecipe()

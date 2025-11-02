@@ -27,7 +27,6 @@ namespace CookMaster.Views
             var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             this.DataContext = new AddRecipeViewModel(userManager,recipeManager);
-
             this.Loaded += AddRecipeWindow_Loaded;
         }
 
