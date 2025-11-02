@@ -63,9 +63,9 @@
 
             <StackPanel Grid.Column="1">
                 <Label Content="Filter by Category:" />
-                <ComboBox ItemsSource="{Binding SelectedItem.Category, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox ItemsSource="{Binding Category,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCategory,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Sort by date:" />
-                <ComboBox ItemsSource="{Binding SelectedItem.Category, UpdateSourceTrigger=PropertyChanged}"/>                
+                <ComboBox ItemsSource="{Binding Recipe.Category, UpdateSourceTrigger=PropertyChanged}"/>                
             </StackPanel>
 
         </Grid>

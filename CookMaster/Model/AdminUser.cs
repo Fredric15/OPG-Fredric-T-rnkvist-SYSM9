@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CookMaster.Model
 {
-    internal class AdminUser : User
+    public class AdminUser : User
     {
-
+       
 
         public void RemoveAnyRecipe()
         {

@@ -17,7 +17,7 @@ namespace CookMaster.ViewModel
         
         private readonly UserManager _userManager;
         private readonly RecipeManager _recipeManager;
-        public ObservableCollection<Recipe> FilteredRecipeList { get; set; }
+        public ObservableCollection<Recipe> RecipeByCategory { get; set; }
         public ObservableCollection<Recipe> UserFilteredRecipeList { get; set; }
 
         private Recipe _selectedRecipe;
@@ -28,6 +28,22 @@ namespace CookMaster.ViewModel
             set { _selectedRecipe = value; OnPropertyChanged(); }
         }
 
+        public List<string> Category { get; set; } = new List<string> {"Visa alla", "Kött", "Fisk och Skaldjur", "Vegetariskt", "Dessert" };
+        private string _selectedCategory = "Visa alla";
+
+        public string SelectedCategory
+        {
+            get { return _selectedCategory; }
+            set 
+            { 
+                if(_selectedCategory != value)
+                { 
+                    _selectedCategory = value;
+                    OnPropertyChanged();
+                    FilterRecipes();
+                }
+            }
+        }
 
         private DateTime _dateTime = DateTime.Now;
 
@@ -58,21 +74,13 @@ namespace CookMaster.ViewModel
         {
             _userManager = userManager;
             _recipeManager = recipeManager;
-            FilteredRecipeList = new ObservableCollection<Recipe>();
+            UserFilteredRecipeList = new ObservableCollection<Recipe>();
 
-            //FilteredRecipeList.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            //FilteredRecipeList.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
 
             SeedDefaultRecipes();
-            /*if (_userManager.CurrentUser.UserName is "admin")
-            {
-                FilterRecipeList = new ObservableCollection<Recipe>();
-                FilterRecipeList = _recipeManager.GetAllRecipes();
-                
-            }*/
-            
-            
             ShowRecipes();
+
+
             UserDetailsCommand = new RelayCommand(execute => UserDetails());
             AddCommand = new RelayCommand(execute => AddRecipes());
             RemoveCommand = new RelayCommand(execute => RemoveRecipes());
@@ -90,7 +98,7 @@ namespace CookMaster.ViewModel
                 return;
             }
             _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+            _recipeManager.AllRecipes.Add(new DessertRecipe { Title = "Pannkakor", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Dessert", CreatedBy = _userManager._users[0], Date = DateTime.Now });
         }
 
         private void SignOut()
@@ -139,8 +147,7 @@ namespace CookMaster.ViewModel
 
         public void ShowRecipes()
         {
-            //var filtrerade = FilteredRecipeList.Where(recipe => recipe.CreatedBy == _userManager.CurrentUser);
-            UserFilteredRecipeList = new ObservableCollection<Recipe>();
+            
             UserFilteredRecipeList = _recipeManager.GetByUser(_userManager.CurrentUser);
             
             
@@ -155,7 +162,7 @@ namespace CookMaster.ViewModel
                 _recipeManager.RemoveRecipe(SelectedRecipe);
                 UserFilteredRecipeList.Remove(SelectedRecipe);
                 SelectedRecipe = null;
-                //ShowRecipes();
+                
                 
             }
             else 
@@ -164,7 +171,57 @@ namespace CookMaster.ViewModel
             }
         }
         public void FilterRecipes()
-        { }
+        {
+            RecipeByCategory = _recipeManager.GetByUser(_userManager.CurrentUser);
+            UserFilteredRecipeList.Clear();
+
+            switch (SelectedCategory)
+            {
+                case "Kött":
+                    foreach (var recipe in RecipeByCategory)
+                    {
+                        if (recipe is KöttRecipe)
+                        {
+                            UserFilteredRecipeList?.Add(recipe);
+                        }
+                    }
+                    break;
+                case "Fisk och Skaldjur":
+                    foreach (var recipe in RecipeByCategory)
+                    {
+                        if (recipe is FiskochSkaldjurRecipe)
+                        {
+                            UserFilteredRecipeList?.Add(recipe);
+                        }
+                    }
+                    break;
+                case "Vegetariskt":
+                    foreach (var recipe in RecipeByCategory)
+                    {
+                        if (recipe is VegetarisktRecipe)
+                        {
+                            UserFilteredRecipeList?.Add(recipe);
+                        }
+                    }
+                    break;
+                case "Dessert":
+                    foreach (var recipe in RecipeByCategory)
+                    {
+                        if (recipe is DessertRecipe)
+                        {
+                            UserFilteredRecipeList?.Add(recipe);
+                        }
+                    }
+                    break;
+                case "Visa alla":
+                    RecipeByCategory = _recipeManager.GetByUser(_userManager.CurrentUser);
+                    foreach (var recipe in RecipeByCategory)
+                    {
+                        UserFilteredRecipeList?.Add(recipe);
+                    }
+                    break;
+            }
+        }
         
     }
 }

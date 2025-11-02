@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CookMaster.Model
 {
-    public class Recipe
+    public abstract class Recipe
     {
         private string? _title;
         private string? _ingredients;
