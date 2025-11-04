@@ -29,13 +29,6 @@ namespace CookMaster.Views
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             this.Loaded += TwoFactorAuthWindow_Loaded;
 
-            
-            
-            //this.DataContextChanged += TwoFactorAuthWindow_DataContextChanged;
-            
-
-
-
         }
 
         private void TwoFactorAuthWindow_Loaded(object sender, RoutedEventArgs e)
@@ -59,19 +52,5 @@ namespace CookMaster.Views
         {
             this.Close();
         }
-
-
-        private void TwoFactorAuthWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is TwoFactorAuthViewModel vm)
-            {
-                
-                vm.GenerateCode += msg => MessageBox.Show(msg, "Two factor verification.");
-                vm.CancelButton += () => this.Close();
-                
-                
-            }
-        }
-
     }
 }

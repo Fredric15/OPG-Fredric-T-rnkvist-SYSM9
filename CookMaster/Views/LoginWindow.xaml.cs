@@ -34,24 +34,21 @@ namespace CookMaster.Views
 
         private void Vm_RecoverPwd(object? sender, EventArgs e)
         {
-            var userManager = (UserManager)Application.Current.Resources["UserManager"];
+
             RecoverPwWindow recover = new RecoverPwWindow();
-            recover.DataContext = new RecoverPwViewModel(userManager);
             recover.ShowDialog();
         }
 
         private void Vm_OpenRegister(object? sender, EventArgs e)
         {
-            //var userManager = (UserManager)Application.Current.Resources["UserManager"];
+
             RegisterWindow window = new RegisterWindow();
-            //window.DataContext = new RegisterViewModel(userManager);
             window.ShowDialog();
         }
 
         private void Vm_OnLoginSuccess(object? sender, string msg)
         {
             MessageBox.Show($"Verifikationskod: {msg}","You got mail!");
-            //var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             
             TwoFactorAuthWindow window = new TwoFactorAuthWindow();
@@ -62,12 +59,23 @@ namespace CookMaster.Views
                 MessageBox.Show("Verification success!");
                 
                 RecipeListWindow recipeList = new RecipeListWindow();
-                //recipeList.DataContext = new RecipeListViewModel(userManager);
                 recipeList.Show();
                 this.Close();
 
-            }else
+            }
+            else
+            {
                 MessageBox.Show("Verification failed.");
+            }
+                
+        }
+
+        private void PwdBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel vm)
+            {
+                vm.Password = PwdBox.Password;
+            }
         }
     }
 }

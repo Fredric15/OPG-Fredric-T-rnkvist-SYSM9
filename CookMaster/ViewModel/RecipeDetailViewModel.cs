@@ -87,17 +87,14 @@ namespace CookMaster.ViewModel
         public event Action<string> RecipeSaved;
         public event Action RequestClose;
         public event Action RequestCopy;
-        public RecipeDetailViewModel(RecipeManager recipemanager ,Recipe recipe)
+        public RecipeDetailViewModel(RecipeManager recipemanager)
         {
             _recipeManager = recipemanager;
-            _recipe = recipe;
 
-            EditTitle = recipe.Title!;
-            EditIngredients = recipe.Ingredients!;
-            EditInstructions = recipe.Instructions!;
-            EditCategory = recipe.Category!;
-
-
+            EditTitle = _recipeManager.SelectedRecipe.Title!;
+            EditIngredients = _recipeManager.SelectedRecipe.Ingredients!;
+            EditInstructions = _recipeManager.SelectedRecipe.Instructions!;
+            EditCategory = _recipeManager.SelectedRecipe.Category!;
 
             SaveCommand = new RelayCommand(execute => SaveDetails());
             EditCommand = new RelayCommand(execute => EditDetails());
@@ -122,10 +119,11 @@ namespace CookMaster.ViewModel
 
         private void SaveDetails()
         {
-            _recipe.Title = EditTitle;
-            _recipe.Ingredients = EditIngredients;
-            _recipe.Instructions = EditInstructions;
-            _recipe.Category = EditCategory;
+
+            _recipeManager.SelectedRecipe.Title = EditTitle;
+            _recipeManager.SelectedRecipe.Ingredients = EditIngredients;
+            _recipeManager.SelectedRecipe.Instructions = EditInstructions;
+
             RecipeSaved?.Invoke("Dina ändringar är sparade.");
             RequestClose?.Invoke();
         }

@@ -57,31 +57,42 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
-        private string _newpassword;
-        public string NewPw
+        private string _newPwd;
+        public string NewPwd
         {
-            get { return _newpassword; }
+            get { return _newPwd; }
             set 
             { 
-                _newpassword = value; 
+                _newPwd = value; 
                 OnPropertyChanged();
             }
         }
-        private string _confirmPw;
+        private string _confirmPwd;
 
-        public string ConfirmPw
+        public string ConfirmPwd
         {
-            get { return _confirmPw; }
+            get { return _confirmPwd; }
             set 
             { 
-                _confirmPw = value;
+                _confirmPwd = value;
                 OnPropertyChanged();
             }
         }
-        
+        private string _errorPwd;
 
-
-
+        public string ErrorPwd
+        {
+            get { return _errorPwd; }
+            set 
+            { 
+                _errorPwd = value;
+                OnPropertyChanged();
+            }
+        }
+        public ICommand FindUserCommand { get; }
+        public ICommand ConfirmAnswerCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
         public RecoverPwViewModel(UserManager usermanager)
         {
             _userManager = usermanager;
@@ -93,13 +104,13 @@ namespace CookMaster.ViewModel
 
         private void Cancel()
         {
-            
+            _userManager.Logout();
             RequestClose?.Invoke();
         }
 
         private bool canSave()
         {
-            if (!string.IsNullOrWhiteSpace(NewPw) && !string.IsNullOrWhiteSpace(ConfirmPw) && NewPw == ConfirmPw)
+            if (!string.IsNullOrWhiteSpace(NewPwd) && !string.IsNullOrWhiteSpace(ConfirmPwd) && NewPwd == ConfirmPwd)
             {
                 return true;
             }
@@ -108,19 +119,17 @@ namespace CookMaster.ViewModel
 
         private void Save()
         {
-            if (_userManager.ValidatePassword(ConfirmPw))
+            if (_userManager.ValidatePassword(ConfirmPwd))
             {
-                _userManager.ChangePassword(InputUsername, NewPw);
+                _userManager.ChangePassword(InputUsername, NewPwd);
                 RequestClose?.Invoke();
                 RequestMessage?.Invoke("Ditt lösenord har ändrats!");
 
             }
             else
             {
-                ErrorText = "Ej korrekt format på password";
+                ErrorPwd = "Ej korrekt format på password";
             }
-            
-            
         }
 
         private bool CanConfirmAnswer()
@@ -148,12 +157,6 @@ namespace CookMaster.ViewModel
                 ErrorText = "Ditt svar matchade ej.";
             }  
         }
-
-        public ICommand FindUserCommand { get;}
-        public ICommand ConfirmAnswerCommand { get;}
-        public ICommand SaveCommand { get;}
-        public ICommand CancelCommand { get;}
-
         private bool CanFindUser()
         {
             if (!string.IsNullOrWhiteSpace(InputUsername))

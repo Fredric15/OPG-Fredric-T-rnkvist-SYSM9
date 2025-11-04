@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -57,6 +58,7 @@ namespace CookMaster.ViewModel
 		{
             _userManager = userManager;
 			
+			
 		}
 
 	
@@ -80,7 +82,8 @@ namespace CookMaster.ViewModel
                 OnLoginSuccess?.Invoke(this, _userManager.TwoFactorCode);
 			}
 			else
-			{ 
+			{
+				
 				ErrorText = "Fel användarnamn eller lösenord."; 
 			}
 		}

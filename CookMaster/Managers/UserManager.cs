@@ -20,10 +20,9 @@ namespace CookMaster.Managers
             get => _currentUser;
             private set
             {
-                _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAuthenticated));
+                _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAdmin));
             }
         }
-
         private string _twoFactorCode;
         public string TwoFactorCode
         {
@@ -33,6 +32,7 @@ namespace CookMaster.Managers
 
         public UserManager()
         {
+            
             _users = new List<User>();
             SeedDefaultUsers();
         }
@@ -41,12 +41,12 @@ namespace CookMaster.Managers
         {
 
             _users.Add(new User {UserName = "user", Password = "password", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
-            _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
-            _users.Add(new User { UserName = "admin", Password = "password", Country = "Sverige", SecurityQuestion = "Vilken var din första skola?", SecurityAnswer = "Fredric" });
+            _users.Add(new User { UserName = "hej", Password = "pass", Country = "Sverige", SecurityQuestion = "Vilket är ditt favoritlag?", SecurityAnswer = "Fredric" });
+            _users.Add(new AdminUser { UserName = "admin", Password = "password", Country = "Sverige", SecurityQuestion = "Vad heter din mormor?", SecurityAnswer = "Fredric"});
 
         }
 
-        public bool IsAuthenticated => CurrentUser != null;
+        public bool IsAdmin => CurrentUser is AdminUser;
         public bool Login(string username, string password)
         { /* sätt CurrentUser, returnera true/false */
 
@@ -64,8 +64,8 @@ namespace CookMaster.Managers
 
         public void Register(string username, string password, string country, string securityQ, string securityA)
         {
-            _users.Add(new User {UserName = username, Password=password,Country = country, SecurityQuestion = securityQ, SecurityAnswer = securityA});
             
+            _users.Add(new User {UserName = username, Password=password,Country = country, SecurityQuestion = securityQ, SecurityAnswer = securityA});
         }
 
         public bool CheckExistingUsername(string username) 
@@ -96,12 +96,15 @@ namespace CookMaster.Managers
         }
         public void ChangePassword(string username, string password)
         {
+            
             if(CurrentUser.UserName == username)
-            {  CurrentUser.Password = password;}
+            {  
+                CurrentUser.Password = password;
+            }
         }
         public virtual bool ValidatePassword(string password)
         {
-            bool validPw = false;
+            
             bool ContainsSpecial = false;
             string specialCharacters = "!@#$%^&*()-_=+[{]};:’\"|\\,<.>/?";
 
@@ -115,13 +118,18 @@ namespace CookMaster.Managers
 
             if (password.Length >= 8 && password.Any(char.IsDigit) && ContainsSpecial)
             {
-                return validPw = true;
+                return true;
             }
             else
             {
                 return false;
             }
-
+        }
+        public List<User> GetAllUsersList()
+        {   
+            //Filtrerar ut alla användare som inte är AdminUser
+            var users = _users.Where(u => u is not AdminUser).ToList();
+            return users;
         }
     }
 }

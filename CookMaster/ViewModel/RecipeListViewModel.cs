@@ -14,11 +14,13 @@ namespace CookMaster.ViewModel
 {
     public class RecipeListViewModel : ViewModelBase
     {
-        
+
         private readonly UserManager _userManager;
         private readonly RecipeManager _recipeManager;
+        public ObservableCollection<User> AllUsersList { get; set;  }
         public ObservableCollection<Recipe> RecipeByCategory { get; set; }
         public ObservableCollection<Recipe> UserFilteredRecipeList { get; set; }
+        public ObservableCollection<Recipe> RecipeByUsers { get; set; }
 
         private Recipe _selectedRecipe;
 
@@ -28,42 +30,56 @@ namespace CookMaster.ViewModel
             set { _selectedRecipe = value; OnPropertyChanged(); }
         }
 
-        public List<string> Category { get; set; } = new List<string> {"Visa alla", "Kött", "Fisk och Skaldjur", "Vegetariskt", "Dessert" };
+        public List<string> Category { get; set; } = new List<string> { "Visa alla", "Kött", "Fisk och Skaldjur", "Vegetariskt", "Dessert" };
+        
         private string _selectedCategory = "Visa alla";
-
         public string SelectedCategory
         {
             get { return _selectedCategory; }
-            set 
-            { 
-                if(_selectedCategory != value)
-                { 
+            set
+            {
+                if (_selectedCategory != value)
+                {
                     _selectedCategory = value;
                     OnPropertyChanged();
                     FilterRecipes();
                 }
             }
         }
+        private User _selectedUser;
+
+        public User SelectedUser
+        {
+            get { return _selectedUser; }
+            set 
+            { 
+                _selectedUser = value;
+                OnPropertyChanged();
+                FilterByUser();
+            }
+        }
+
+
 
         private DateTime _dateTime = DateTime.Now;
 
         public DateTime DateTime
         {
             get { return _dateTime; }
-            set 
-            { 
+            set
+            {
                 _dateTime = value; OnPropertyChanged();
             }
         }
 
         public string FormattedTime => _dateTime.ToString("HH:mm:ss");
 
-        public ICommand UserDetailsCommand { get;}
-        public ICommand AddCommand { get;}
-        public ICommand RemoveCommand { get;}
-        public ICommand DetailsCommand { get;}
-        public ICommand InfoCommand { get;}
-        public ICommand SignOutCommand {  get;}
+        public ICommand UserDetailsCommand { get; }
+        public ICommand AddCommand { get; }
+        public ICommand RemoveCommand { get; }
+        public ICommand DetailsCommand { get; }
+        public ICommand InfoCommand { get; }
+        public ICommand SignOutCommand { get; }
 
         public event Action RequestRecipeDetails;
         public event Action RequestAddRecipe;
@@ -75,11 +91,11 @@ namespace CookMaster.ViewModel
             _userManager = userManager;
             _recipeManager = recipeManager;
             UserFilteredRecipeList = new ObservableCollection<Recipe>();
-
+            //En userlista som Admin kan filtrerar mellan
+            AllUsersList = new ObservableCollection<User>(_userManager.GetAllUsersList());
 
             SeedDefaultRecipes();
             ShowRecipes();
-
 
             UserDetailsCommand = new RelayCommand(execute => UserDetails());
             AddCommand = new RelayCommand(execute => AddRecipes());
@@ -91,14 +107,17 @@ namespace CookMaster.ViewModel
 
         private void SeedDefaultRecipes()
         {
-            var currentuser = _userManager.CurrentUser;
-            bool userAlreadyHasRecipes = _recipeManager.AllRecipes.Any(r => r.CreatedBy == currentuser );
+
+            bool userAlreadyHasRecipes = _recipeManager.AllRecipes.Any(r => r.Title == "Köttfärssås" || r.Title == "Pannkakor");
             if (userAlreadyHasRecipes)
             {
                 return;
             }
-            _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            _recipeManager.AllRecipes.Add(new DessertRecipe { Title = "Pannkakor", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Dessert", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+            else
+            {
+                _recipeManager.AllRecipes.Add(new KöttRecipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
+                _recipeManager.AllRecipes.Add(new DessertRecipe { Title = "Pannkakor", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Dessert", CreatedBy = _userManager._users[1], Date = DateTime.Now });
+            }
         }
 
         private void SignOut()
@@ -109,7 +128,8 @@ namespace CookMaster.ViewModel
 
         private void CookMasterInfo()
         {
-            InfoMessage?.Invoke("Välkommen till CookMaster.\n" +
+            InfoMessage?.Invoke(
+                "Välkommen till CookMaster.\n" +
                 "Ett nystartat företag som vill göra det enkelt för dig att spara och hantera dina favoritrecept.\n" +
                 "Du kan lägga till recept via knappen \"Add\".\n" +
                 "Ta bort recpet genom att markera ett recapt och sedan trycka på \"Delete\".\n" +
@@ -125,7 +145,7 @@ namespace CookMaster.ViewModel
                 _recipeManager.SelectedRecipe = SelectedRecipe;
                 RequestRecipeDetails?.Invoke();
                 SelectedRecipe = null;
-                
+
 
             }
             else
@@ -147,25 +167,22 @@ namespace CookMaster.ViewModel
 
         public void ShowRecipes()
         {
-            
             UserFilteredRecipeList = _recipeManager.GetByUser(_userManager.CurrentUser);
-            
-            
         }
 
-        
 
-        private void RemoveRecipes() 
-        { 
-            if(SelectedRecipe != null)
+
+        private void RemoveRecipes()
+        {
+            if (SelectedRecipe != null)
             {
                 _recipeManager.RemoveRecipe(SelectedRecipe);
                 UserFilteredRecipeList.Remove(SelectedRecipe);
                 SelectedRecipe = null;
-                
-                
+
+
             }
-            else 
+            else
             {
                 InfoMessage?.Invoke("Du måste markera ett recept.");
             }
@@ -222,6 +239,24 @@ namespace CookMaster.ViewModel
                     break;
             }
         }
-        
+        private void FilterByUser()
+        {
+            UserFilteredRecipeList.Clear();
+            if (SelectedUser == null)
+            {
+                UserFilteredRecipeList = _recipeManager.GetByUser(_userManager.CurrentUser);
+                return;
+            }
+            RecipeByUsers = new ObservableCollection<Recipe>(_recipeManager.GetByUser(_userManager.CurrentUser));
+            
+            foreach (var recipe in RecipeByUsers)
+            {
+
+                if (recipe.CreatedBy == SelectedUser)
+                {
+                    UserFilteredRecipeList?.Add(recipe);
+                }
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@
                 <TextBlock Text="Username" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
                 <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
                 <TextBlock Text="Password" FontSize="14" FontWeight="Bold" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-                <TextBox Text="{Binding Password, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                <PasswordBox Name="PwdBox" PasswordChanged="PwdBox_PasswordChanged" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
                 <Button Content="Logga In" Command="{Binding LoginCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
                 <Button Content="Registrera" Command="{Binding RegisterCommand}" FontWeight="Bold" VerticalAlignment="Bottom" Margin="5"/>
                 <Button VerticalAlignment="Bottom" Command="{Binding RecoverPwCommand}" Width="55" Margin="5">

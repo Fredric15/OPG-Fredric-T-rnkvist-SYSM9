@@ -48,24 +48,15 @@ namespace CookMaster.Managers
 
 
 
-        public RecipeManager()//UserManager userManager)
+        public RecipeManager()
         {
-            //_userManager = userManager;
             AllRecipes = new ObservableCollection<Recipe>();
-            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0], Date = DateTime.Now });
-            //AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now });
+
         }
-        public RecipeManager(UserManager userManager)
+        /*public RecipeManager(UserManager userManager)
         {
             _userManager = userManager;
 
-        }
-
-        /*public void SeedDefaultRecipes()
-        {
-            
-            AllRecipes.Add(new Recipe { Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[0] , Date = DateTime.Now});
-            AllRecipes.Add(new Recipe {Title = "Köttfärssås", Ingredients = "Nötfärs, Tomatsås, Lök, Vitlök, Spaghetti", Instructions = "Blanda allt", Category = "Kött", CreatedBy = _userManager._users[1], Date = DateTime.Now});
         }*/
 
         public void AddRecipe(Recipe recipe)
@@ -85,8 +76,18 @@ namespace CookMaster.Managers
         }
         public ObservableCollection<Recipe> GetByUser(User user)
         {
-            var filtrerade = AllRecipes.Where(recipe => recipe.CreatedBy == user);
-            return UserFilteredRecipe = new ObservableCollection<Recipe>(filtrerade);
+            if (user is AdminUser)
+            {
+                var allRecipes = AllRecipes;
+
+                return UserFilteredRecipe = new ObservableCollection<Recipe>(allRecipes);
+            }
+            else
+            {
+                var filtrerade = AllRecipes.Where(recipe => recipe.CreatedBy == user);
+                return UserFilteredRecipe = new ObservableCollection<Recipe>(filtrerade);
+            }
+
 
         }
         public void Filter(string criteria)

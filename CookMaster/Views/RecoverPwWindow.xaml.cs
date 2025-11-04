@@ -3,6 +3,7 @@ using CookMaster.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,8 +26,21 @@ namespace CookMaster.Views
         {
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
-            
-            this.DataContextChanged += OnDataContextChanged;
+            this.DataContext = new RecoverPwViewModel(userManager);
+            //this.DataContextChanged += OnDataContextChanged;
+            this.Loaded += RecoverPwWindow_Loaded;
+        }
+
+        private void RecoverPwWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is RecoverPwViewModel vm)
+            {
+                vm.RequestClose += () => this.Close();
+
+                vm.RequestMessage += msg => MessageBox.Show(msg, "Information");
+
+
+            }
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -38,6 +52,16 @@ namespace CookMaster.Views
                 rvm.RequestClose += () => this.Close();
 
                 rvm.RequestMessage += msg => MessageBox.Show(msg, "Information");
+            }
+
+        }
+
+        private void PwdBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is RecoverPwViewModel vm)
+            {
+                vm.NewPwd = PwdBox.Password;
+                vm.ConfirmPwd = ConfirmPwd.Password;
             }
 
         }

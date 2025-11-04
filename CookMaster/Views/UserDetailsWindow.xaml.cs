@@ -45,5 +45,15 @@ namespace CookMaster.Views
             Close();
             window.Show();
         }
+
+        private void PwdBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is UserDetailsViewModel vm)
+            { 
+                vm.NewPwd = PwdBox.Password; 
+                vm.ConfirmPwd = ConfirmPwd.Password;
+            }
+
+        }
     }
 }

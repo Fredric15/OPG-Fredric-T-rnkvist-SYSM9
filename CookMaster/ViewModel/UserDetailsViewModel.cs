@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace CookMaster.ViewModel
 {
-    public class UserDetailsViewModel : RegisterViewModel
+    public class UserDetailsViewModel : ViewModelBase
     {
         private readonly UserManager _userManager;
         private string _newUsername;
@@ -55,11 +55,12 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        public List<String> Countries { get; set; } = new List<string> { "Sverige", "Finland", "Norge", "Danmark" };
+        public List<String> SecurityQ { get; set; } = new List<string> { "Vilken var din första skola?", "Vad heter din mormor?", "Vilket är ditt favoritlag?" };
 
         private string _errorText;
 
-        public new string ErrorText
+        public string ErrorText
         {
             get { return _errorText; }
             set 
@@ -71,13 +72,17 @@ namespace CookMaster.ViewModel
 
 
         public ICommand SaveCommand { get;}
-        public new ICommand CancelCommand { get;}
+        public ICommand CancelCommand { get;}
 
         public event Action SaveUserDetails;
         public event Action CloseWindow;
-        public UserDetailsViewModel(UserManager userManager) : base(userManager) 
+        public UserDetailsViewModel(UserManager userManager)
         {
             _userManager = userManager;
+            
+            NewCountry = _userManager.CurrentUser.Country;
+
+
             SaveCommand = new RelayCommand(execute => SaveDetails());
             CancelCommand = new RelayCommand(execute => Cancel());
         }
@@ -96,6 +101,7 @@ namespace CookMaster.ViewModel
             {
                 if (CheckUsername(NewUsername))
                 {
+                    System.Windows.MessageBox.Show("Dina ändringar är sparade.");
                     _userManager.CurrentUser.UpdateUsername(NewUsername);
                     CloseWindow?.Invoke();
                 }
@@ -105,14 +111,16 @@ namespace CookMaster.ViewModel
             {
                 if (ValidPwd() && MatchingPwd())
                 {
+                    System.Windows.MessageBox.Show("Dina ändringar är sparade.");
                     _userManager.CurrentUser.UpdatePassword(NewPwd);
                     CloseWindow?.Invoke();
                 }
             }
 
             if (_userManager.CurrentUser.Country != NewCountry && !string.IsNullOrWhiteSpace(NewCountry)) 
-            { 
-            
+            {
+
+                System.Windows.MessageBox.Show("Dina ändringar är sparade.");
                 _userManager.CurrentUser.UpdateCountry(NewCountry);
                 CloseWindow?.Invoke();
             
@@ -120,7 +128,7 @@ namespace CookMaster.ViewModel
 
         }
         
-        protected override bool ValidPwd()
+        protected bool ValidPwd()
         {
             if (_userManager.ValidatePassword(NewPwd))
             {
@@ -134,7 +142,7 @@ namespace CookMaster.ViewModel
 
         }
 
-        protected override bool MatchingPwd()
+        protected bool MatchingPwd()
         {
             if (NewPwd == ConfirmPwd)
             {
@@ -148,7 +156,7 @@ namespace CookMaster.ViewModel
             }
         }
 
-        protected override bool CheckUsername(string username)
+        protected bool CheckUsername(string username)
         {
             //Anropar metoden ExisitngUsername och använder ! för att göra det till true om ledigt användarnamn.
             //Kontrollerar även längd.

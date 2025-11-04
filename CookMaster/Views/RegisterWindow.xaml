@@ -10,17 +10,20 @@
         <TextBlock Text="Username:" Width="Auto" Margin="5,5,5,0"/>
         <TextBox Text="{Binding UserName ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
         <TextBlock Text="Password:" Width="Auto" Margin="5,5,5,0"/>
-        <TextBox Text="{Binding Password ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <PasswordBox Name="PwdBox" PasswordChanged="PwdBox_PasswordChanged" Margin="5,0,5,0"/>
         <TextBlock Text="Bekräfta Password:" Width="Auto" Margin="5,5,5,0"/>
-        <TextBox Text="{Binding ConfirmPw ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+        <PasswordBox Name="ConfirmPwd" PasswordChanged="PwdBox_PasswordChanged" Margin="5,0,5,0"/>
         <TextBlock Text="Välj land:" Width="Auto" Margin="5,5,5,0"/>
         <ComboBox ItemsSource="{Binding Countries, Mode=OneWay}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
         <TextBlock Text="Välj säkerhetsfråga:" Width="auto" Margin="5,5,5,0"/>
         <ComboBox ItemsSource="{Binding SecurityQ}" SelectedItem="{Binding SelectedQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
         <TextBlock Text="Ange ditt svar:" Margin="5,5,5,0"/>
         <TextBox Text="{Binding SecurityAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
-        <Button Content="Registrera ny användare" Command="{Binding NewUserCommand}" Margin="5,5,5,0"/>
-        <Button Content="Avbryt" Width="auto" Command="{Binding CancelCommand}" Margin="5,0,5,0"/>
         <TextBlock Text="{Binding ErrorText}" TextWrapping="Wrap" Foreground="Red" Width="auto" Margin="5,5,5,0"/>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Register" Height="25" Width="50" Command="{Binding NewUserCommand}" Margin="5,5,5,0"/>
+            <Button Content="Cancel" Height="25" Width="50" Command="{Binding CancelCommand}" Margin="5,5,5,0"/>
+        </StackPanel>
+        
     </StackPanel>
 </Window>
