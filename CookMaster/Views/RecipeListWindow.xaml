@@ -8,10 +8,10 @@
         xmlns:local2="clr-namespace:CookMaster.Managers"
         mc:Ignorable="d"
         Title="RecipeListWindow" Height="450" Width="800">
+    
     <Window.Resources>
         <local1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Window.Resources>
-
 
     <Grid>
         <Grid.RowDefinitions>
@@ -50,19 +50,21 @@
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
 
-
+            <!--En readonly datagrid så man inte kan ändra i raderna och kolumnerna på recepten-->
             <DataGrid
                 IsReadOnly="True"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
-                ItemsSource="{Binding UserFilteredRecipeList}"
+                ItemsSource="{Binding VisibleRecipeList}"
                 SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}">
 
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="4*" Header="Titel" Binding="{Binding Title}" />
-                    <DataGridTextColumn Width="4*" Header="Created By:" Binding="{Binding CreatedBy.UserName, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Width="1*" Header="Category" Binding="{Binding Category}"/>
+                    <DataGridTextColumn Width="4*" Header="Title" Binding="{Binding Title}" />
+                    <DataGridTextColumn Width="3*" Header="Created By:" Binding="{Binding CreatedBy.UserName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Width="3*" Header="Category" Binding="{Binding Category}"/>
+                    <DataGridTextColumn Width="3*" Header="Estimated time:" Binding="{Binding Time, StringFormat='{}{0} mins'}"/>
+                    <DataGridTextColumn Width="2*" Header="Date added" Binding="{Binding Date}"/>
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -70,8 +72,10 @@
             <StackPanel Grid.Column="1">
                 <Label Content="Filter by Category:" />
                 <ComboBox ItemsSource="{Binding Category,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCategory,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
+                <!--Label, Combobox samt Button som endast är synliga för en Admin-->
                 <Label Content="Filter by User:" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
-                <ComboBox ItemsSource="{Binding AllUsersList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="UserName" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"  Margin="5,0,5,0"/>                
+                <ComboBox ItemsSource="{Binding AllUsersList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUser,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="UserName" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,5,0"/>
+                <Button Content="Reset filter" Command="{Binding ResetFilterCommand, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5"/>
             </StackPanel>
 
         </Grid>

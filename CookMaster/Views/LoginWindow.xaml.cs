@@ -48,11 +48,15 @@ namespace CookMaster.Views
 
         private void Vm_OnLoginSuccess(object? sender, string msg)
         {
+            //En messagebox poppar upp med den sexsiffriga koden som genereras när en användare försöker logga in
             MessageBox.Show($"Verifikationskod: {msg}","You got mail!");
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             
             TwoFactorAuthWindow window = new TwoFactorAuthWindow();
-            window.DataContext = new TwoFactorAuthViewModel(userManager);
+            
+            //Använder en Show.Dialog som returnerar true om koden matchar användarens input
+            //Om true så öppnas RecipeListWindow
+            //Annars tillbaka till LoginWindow
             var success = window.ShowDialog();
             if (success == true)
             {

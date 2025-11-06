@@ -41,6 +41,7 @@ namespace CookMaster.Views
 
         private void Vm_CloseWindow()
         {
+            //Stönger nuvarande fönster och öppnar ett nytt RecipeListWindow
             RecipeListWindow window = new RecipeListWindow();
             Close();
             window.Show();

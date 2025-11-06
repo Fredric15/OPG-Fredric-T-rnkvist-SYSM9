@@ -15,8 +15,8 @@ namespace CookMaster.ViewModel
         private readonly UserManager _userManager;
         private readonly RecipeManager _recipeManager;
 		private readonly Recipe _recipe;
-        private string _inputTitle;
-
+        
+		private string _inputTitle;
 		public string InputTitle
 		{
 			get { return _inputTitle; }
@@ -60,8 +60,20 @@ namespace CookMaster.ViewModel
 				OnPropertyChanged();
 			}
 		}
-		private string _errorText;
 
+		private string _time;
+		public string Time
+		{
+			get { return _time; }
+			set 
+			{ 
+				_time = value; 
+				OnPropertyChanged();
+			}
+		}
+
+
+		private string _errorText;
 		public string ErrorText
 		{
 			get { return _errorText; }
@@ -74,9 +86,12 @@ namespace CookMaster.ViewModel
 
 		public ICommand AddRecipeCommand {  get;}
 		public ICommand CancelCommand { get;}
+
+		//Events som stänger fönster samt skickar bekräftelsemeddelande
 		public event Action RequestClose;
 		public event Action<string> ConfirmAddRecipe;
-        public AddRecipeViewModel(UserManager usermanager, RecipeManager recipemanager)
+
+		public AddRecipeViewModel(UserManager usermanager, RecipeManager recipemanager)
         {
 			_userManager = usermanager;
 			_recipeManager = recipemanager;
@@ -84,7 +99,9 @@ namespace CookMaster.ViewModel
 			AddRecipeCommand = new RelayCommand(execute => AddRecipe());
 			CancelCommand = new RelayCommand(execute => Cancel());
         }
-		public AddRecipeViewModel(UserManager usermanager, RecipeManager recipemanager, Recipe recipe)
+
+        //En konstruktor som används när man kopierar ett recept från RecipeDetailsWindow så att samtliga fält fylls i när AppRecipe öppnas
+        public AddRecipeViewModel(UserManager usermanager, RecipeManager recipemanager, Recipe recipe)
 		{
             _userManager = usermanager;
             _recipeManager = recipemanager;
@@ -94,6 +111,7 @@ namespace CookMaster.ViewModel
 			InputIngredients = recipe.Ingredients;
 			InputInstructions = recipe.Instructions;
 			SelectedCategory = recipe.Category;
+			Time = recipe.Time;
 
             AddRecipeCommand = new RelayCommand(execute => AddRecipe());
             CancelCommand = new RelayCommand(execute => Cancel());
@@ -106,7 +124,9 @@ namespace CookMaster.ViewModel
 
         private void AddRecipe()
         {
-			if(!string.IsNullOrWhiteSpace(InputTitle) && !string.IsNullOrWhiteSpace(InputIngredients) && !string.IsNullOrWhiteSpace(InputInstructions) && SelectedCategory != null)
+			//Om alla fält är i fyllda så skapas det ett nytt recept i vald kategori
+			//Annars ett felmeddelande
+			if(!string.IsNullOrWhiteSpace(InputTitle) && !string.IsNullOrWhiteSpace(InputIngredients) && !string.IsNullOrWhiteSpace(InputInstructions) && SelectedCategory != null && !string.IsNullOrWhiteSpace(Time))
 			{
 				switch (SelectedCategory)
 				{
@@ -118,7 +138,7 @@ namespace CookMaster.ViewModel
 							Instructions = InputInstructions,
 							Category = SelectedCategory,
 							CreatedBy = _userManager.CurrentUser,
-							Date = DateTime.Now
+							Date = DateTime.Now.ToString("yyyy/MM/dd")
 						};
 						_recipeManager.AddRecipe(köttrecipe);
 						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
@@ -133,7 +153,7 @@ namespace CookMaster.ViewModel
 							Instructions = InputInstructions,
 							Category = SelectedCategory,
 							CreatedBy = _userManager.CurrentUser,
-							Date = DateTime.Now
+							Date = DateTime.Now.ToString("yyyy/MM/dd")
 						};
 						_recipeManager.AddRecipe(fiskrecipe);
 						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
@@ -147,7 +167,7 @@ namespace CookMaster.ViewModel
 							Instructions = InputInstructions,
 							Category = SelectedCategory,
 							CreatedBy = _userManager.CurrentUser,
-							Date = DateTime.Now
+							Date = DateTime.Now.ToString("yyyy/MM/dd")
 						};
 						_recipeManager.AddRecipe(vegrecipe);
 						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");
@@ -162,7 +182,7 @@ namespace CookMaster.ViewModel
 							Instructions = InputInstructions,
 							Category = SelectedCategory,
 							CreatedBy = _userManager.CurrentUser,
-							Date = DateTime.Now
+							Date = DateTime.Now.ToString("yyyy/MM/dd")
 						};
 						_recipeManager.AddRecipe(dessertrecipe);
 						ConfirmAddRecipe?.Invoke("Ditt recept är sparat.");

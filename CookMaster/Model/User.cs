@@ -46,15 +46,6 @@ namespace CookMaster.Model
 			set { _securityAnswer = value; }
 		}
 
-
-        public void ValidateLogin()
-        {
-	
-		}
-
-		public void ChangePassword()
-		{ }
-
 		public void UpdateUsername(string username)
 		{ 
 			UserName = username;
@@ -69,9 +60,12 @@ namespace CookMaster.Model
 		{
 			Country = country;
 		}
-        public void UpdateSecurity(string securityQ, string securityA)
+        public void UpdateSecurityQ(string securityQ)
         {
             SecurityQuestion = securityQ;
+        }
+		public void UpdateSecurityA(string securityA)
+        {
             SecurityAnswer = securityA;
         }
     }

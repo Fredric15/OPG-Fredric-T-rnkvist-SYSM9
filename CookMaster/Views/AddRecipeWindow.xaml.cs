@@ -27,6 +27,8 @@ namespace CookMaster.Views
             var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             this.DataContext = new AddRecipeViewModel(userManager,recipeManager);
+
+            //Här ser jag till så att när detta fönstret är skapat så lyssnar den sedan på event som utlöses i viewmodel
             this.Loaded += AddRecipeWindow_Loaded;
         }
 

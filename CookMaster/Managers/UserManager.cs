@@ -14,6 +14,7 @@ namespace CookMaster.Managers
     {
         public readonly List<User> _users = new();
 
+        //En property som håller reda på den inloggade användaren i programmet
         private User _currentUser;
         public User CurrentUser
         {
@@ -23,6 +24,8 @@ namespace CookMaster.Managers
                 _currentUser = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsAdmin));
             }
         }
+
+        
         private string _twoFactorCode;
         public string TwoFactorCode
         {
@@ -30,6 +33,10 @@ namespace CookMaster.Managers
             set { _twoFactorCode = value; }
         }
 
+        //Returnerar true om inloggade usern är en Admin
+        //Annars falsk
+        public bool IsAdmin => CurrentUser is AdminUser;
+        
         public UserManager()
         {
             
@@ -37,6 +44,7 @@ namespace CookMaster.Managers
             SeedDefaultUsers();
         }
 
+        //Skapar ett par default användare
         private void SeedDefaultUsers()
         {
 
@@ -46,10 +54,10 @@ namespace CookMaster.Managers
 
         }
 
-        public bool IsAdmin => CurrentUser is AdminUser;
         public bool Login(string username, string password)
-        { /* sätt CurrentUser, returnera true/false */
-
+        { 
+            //Kontrollerar användares username resp password och returnerar true om det stämmer
+            //Användaren skickas in som CurrentUser
             foreach (var user in _users)
             {
                 if (user.UserName == username && user.Password == password)
@@ -62,6 +70,7 @@ namespace CookMaster.Managers
         }
         public void Logout() => CurrentUser = null;
 
+        //Tar emot argument till sina parameterar och skapar en ny användare som läggs till i user-listan
         public void Register(string username, string password, string country, string securityQ, string securityA)
         {
             
@@ -83,7 +92,7 @@ namespace CookMaster.Managers
         }
         public bool FindUser(string username)
         {
-
+            //Returnerar true om användarnamn hittas annars false
             foreach (var user in _users)
             {
                 if (user.UserName.Equals(username))
@@ -96,6 +105,7 @@ namespace CookMaster.Managers
         }
         public void ChangePassword(string username, string password)
         {
+            //Uppdaterar lösenordet
             
             if(CurrentUser.UserName == username)
             {  
@@ -104,7 +114,7 @@ namespace CookMaster.Managers
         }
         public virtual bool ValidatePassword(string password)
         {
-            
+            //Kontrollerar att password innehåller specialtecken, siffra och minst åtta tecken
             bool ContainsSpecial = false;
             string specialCharacters = "!@#$%^&*()-_=+[{]};:’\"|\\,<.>/?";
 

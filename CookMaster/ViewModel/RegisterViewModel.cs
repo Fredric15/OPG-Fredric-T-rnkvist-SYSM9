@@ -115,7 +115,8 @@ namespace CookMaster.ViewModel
         
         private bool AllInputBoxesChecked()
         {
-            //Kontrollerar att alla fält är ifyllda för att "Register"-button ska bli enabled
+            //Kontrollerar att alla fält är ifyllda
+            //Samt att användarnamn och lösenord stämmer med kraven för att "Register"-button ska bli enabled
             if (!string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(ConfirmPwd) && !string.IsNullOrWhiteSpace(SelectedCountry) && !string.IsNullOrWhiteSpace(SelectedQ) && !string.IsNullOrWhiteSpace(SecurityAnswer) && CheckUsername(UserName) && MatchingPwd() && ValidPwd())
             {
                 
@@ -162,18 +163,25 @@ namespace CookMaster.ViewModel
 
         private bool CheckUsername(string username)
         {
-            //Kontrollerar ifall användarnamnet är upttaget eller ej
+            //Kontrollerar ifall användarnamnet är upptaget eller ej
+            //Kontrollerar även att minst antal tecken
             if (!_userManager.CheckExistingUsername(username))
             {
-                
-                return true;
+                if(username.Length >= 3)
+                {
+                    return true;
+                }
+                else 
+                {
+                    ErrorText = "Användarnamnet måste vara minst tre tecken.";
+                    return false; 
+                }
             }
             else
             {
                 ErrorText = "Användarnamnet är upptaget.";
                 return false;
             }
-            
         }
 
         private void CreateUser()

@@ -12,8 +12,8 @@ namespace CookMaster.ViewModel
     public class UserDetailsViewModel : ViewModelBase
     {
         private readonly UserManager _userManager;
+        
         private string _newUsername;
-
         public string NewUsername
         {
             get { return _newUsername; }
@@ -34,6 +34,7 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+        
         private string _confirmPwd;
         public string ConfirmPwd
         {
@@ -44,8 +45,8 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+        
         private string _newcountry;
-
         public string NewCountry
         {
             get { return _newcountry; }
@@ -55,11 +56,38 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private string _NewSecurityQ;
+        public string NewSecurityQ
+        {
+            get { return _NewSecurityQ; }
+            set 
+            { 
+                _NewSecurityQ = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _newSecurityA;
+
+        public string NewSecurityA
+        {
+            get { return _newSecurityA; }
+            set 
+            { 
+                _newSecurityA = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
         public List<String> Countries { get; set; } = new List<string> { "Sverige", "Finland", "Norge", "Danmark" };
         public List<String> SecurityQ { get; set; } = new List<string> { "Vilken var din första skola?", "Vad heter din mormor?", "Vilket är ditt favoritlag?" };
 
-        private string _errorText;
 
+
+        private string _errorText;
         public string ErrorText
         {
             get { return _errorText; }
@@ -69,7 +97,6 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged(); 
             }
         }
-
 
         public ICommand SaveCommand { get;}
         public ICommand CancelCommand { get;}
@@ -81,7 +108,8 @@ namespace CookMaster.ViewModel
             _userManager = userManager;
             
             NewCountry = _userManager.CurrentUser.Country;
-
+            NewSecurityQ = _userManager.CurrentUser.SecurityQuestion;
+            NewSecurityA = _userManager.CurrentUser.SecurityAnswer;
 
             SaveCommand = new RelayCommand(execute => SaveDetails());
             CancelCommand = new RelayCommand(execute => Cancel());
@@ -96,6 +124,7 @@ namespace CookMaster.ViewModel
 
         private void SaveDetails()
         {
+            //Här uppdateras den användarinfo som användaren har valt att fylla i på nytt i fönstret
             
             if (!string.IsNullOrWhiteSpace(NewUsername))
             {
@@ -116,22 +145,39 @@ namespace CookMaster.ViewModel
                     CloseWindow?.Invoke();
                 }
             }
-
-            if (_userManager.CurrentUser.Country != NewCountry && !string.IsNullOrWhiteSpace(NewCountry)) 
+            
+            if (_userManager.CurrentUser.Country != NewCountry && !string.IsNullOrWhiteSpace(NewCountry))
             {
 
                 System.Windows.MessageBox.Show("Dina ändringar är sparade.");
                 _userManager.CurrentUser.UpdateCountry(NewCountry);
                 CloseWindow?.Invoke();
-            
             }
 
-        }
-        
-        protected bool ValidPwd()
-        {
-            if (_userManager.ValidatePassword(NewPwd))
+            if (_userManager.CurrentUser.SecurityQuestion != NewSecurityQ && !string.IsNullOrWhiteSpace(NewSecurityQ))
             {
+
+                System.Windows.MessageBox.Show("Dina ändringar är sparade.");
+                _userManager.CurrentUser.UpdateSecurityQ(NewSecurityQ);
+                CloseWindow?.Invoke();
+            }
+
+            if (_userManager.CurrentUser.SecurityAnswer != NewSecurityA && !string.IsNullOrWhiteSpace(NewSecurityA))
+            {
+
+                System.Windows.MessageBox.Show("Dina ändringar är sparade.");
+                _userManager.CurrentUser.UpdateSecurityA(NewSecurityA);
+                CloseWindow?.Invoke();
+            }
+        }
+
+        private bool ValidPwd()
+        {
+            //Kontrollerar att det är rätt format i båda passwordboxarna
+            
+            if (_userManager.ValidatePassword(NewPwd) || _userManager.ValidatePassword(ConfirmPwd))
+            {
+                ErrorText = "";
                 return true;
             }
             else
@@ -142,8 +188,10 @@ namespace CookMaster.ViewModel
 
         }
 
-        protected bool MatchingPwd()
+        private bool MatchingPwd()
         {
+            //Kontrollerar att båda lösenorden matchar
+            
             if (NewPwd == ConfirmPwd)
             {
                 ErrorText = "";
@@ -155,23 +203,27 @@ namespace CookMaster.ViewModel
                 return false;
             }
         }
-
-        protected bool CheckUsername(string username)
+        private bool CheckUsername(string username)
         {
-            //Anropar metoden ExisitngUsername och använder ! för att göra det till true om ledigt användarnamn.
-            //Kontrollerar även längd.
-            
-            if (!(_userManager.CheckExistingUsername(username)) && username.Length >= 3)
+            //Kontrollerar ifall användarnamnet är upptaget eller ej
+            //Kontrollerar även att minst antal tecken stämmer
+            if (!_userManager.CheckExistingUsername(username))
             {
-
-                return true;
+                if (username.Length >= 3)
+                {
+                    return true;
+                }
+                else
+                {
+                    ErrorText = "Användarnamnet måste vara minst tre tecken.";
+                    return false;
+                }
             }
             else
             {
-                ErrorText = "Användarnamnet är antingen upptaget eller för kort. Minst tre tecken.";
+                ErrorText = "Användarnamnet är upptaget.";
                 return false;
             }
-
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CookMaster.Views"
         mc:Ignorable="d"
-        Title="AddRecipeWindow" Height="450" Width="400">
+        Title="AddRecipeWindow" Height="475" Width="400">
     <StackPanel>
         <TextBlock Text="Title:" FontWeight="Bold" Width="Auto" Margin="5,5,5,0"/>
         <TextBox Text="{Binding InputTitle ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
@@ -13,6 +13,8 @@
         <TextBox Text="{Binding InputIngredients ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinHeight="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="5,0,5,0"/>
         <TextBlock Text="Instructions:" FontWeight="Bold" Width="Auto" Margin="5,5,5,0"/>
         <TextBox Text="{Binding InputInstructions ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinHeight="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"  Margin="5,0,5,0"/>
+        <TextBlock Text="Estimated time: (mins)" FontWeight="Bold" Margin="5,5,5,0"/>
+        <TextBox Text="{Binding Time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
         <TextBlock Text="Choose Category:" FontWeight="Bold" Width="Auto" Margin="5,5,5,0"/>
         <ComboBox ItemsSource="{Binding Category, Mode=TwoWay}" SelectedItem="{Binding SelectedCategory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
         <TextBlock Text="{Binding ErrorText}" TextWrapping="Wrap" Foreground="Red" Width="auto" Margin="5,5,5,0"/>

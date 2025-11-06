@@ -43,6 +43,8 @@ namespace CookMaster.Views
 
         private void Rvm_RequestCopy()
         {
+            //När användare väljer att kopiera ett recept så injekterar jag det valda receptet
+            //Alla egenskaperna kan jag då sätta i konstruktorn så allt är ifyllt när fönstret AddRecipe öppnas
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             var recipeManager = (RecipeManager)Application.Current.Resources["RecipeManager"];
             AddRecipeWindow window = new AddRecipeWindow();

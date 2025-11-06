@@ -8,8 +8,6 @@ namespace CookMaster.Model
 {
     public class AdminUser : User
     {
-       public bool Admin { get; set; }
-
         public void RemoveAnyRecipe()
         {
 

@@ -16,7 +16,6 @@ namespace CookMaster.ViewModel
         private readonly Recipe _recipe;
 
         private string _editTitle;
-
         public string EditTitle
         {
             get { return _editTitle; }
@@ -26,8 +25,8 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+        
         private string _editIngredients;
-
         public string EditIngredients
         {
             get { return _editIngredients; }
@@ -37,8 +36,8 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+        
         private string _editInstructions;
-
         public string EditInstructions
         {
             get { return _editInstructions; }
@@ -50,7 +49,6 @@ namespace CookMaster.ViewModel
         }
 
         private string _editCategory;
-
         public string EditCategory
         {
             get { return _editCategory; }
@@ -61,12 +59,18 @@ namespace CookMaster.ViewModel
             }
         }
 
-
-
+        private string _editTime;
+        public string EditTime
+        {
+            get { return _editTime; }
+            set
+            {
+                _editTime = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _editable = false;
-
-
         public bool Editable
         {
             get { return _editable; }
@@ -76,6 +80,18 @@ namespace CookMaster.ViewModel
                 OnPropertyChanged();
             }
         }
+        private string _errorText;
+
+        public string ErrorText
+        {
+            get { return _errorText; }
+            set 
+            { 
+                _errorText = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public List<string> Category { get; set; } = new List<string> { "Kött", "Fisk och Skaldjur", "Vegetariskt", "Dessert" };
 
@@ -91,10 +107,12 @@ namespace CookMaster.ViewModel
         {
             _recipeManager = recipemanager;
 
+            //Fyller i alla fälten med valt recepts properties 
             EditTitle = _recipeManager.SelectedRecipe.Title!;
             EditIngredients = _recipeManager.SelectedRecipe.Ingredients!;
             EditInstructions = _recipeManager.SelectedRecipe.Instructions!;
             EditCategory = _recipeManager.SelectedRecipe.Category!;
+            EditTime = _recipeManager.SelectedRecipe.Time!;
 
             SaveCommand = new RelayCommand(execute => SaveDetails());
             EditCommand = new RelayCommand(execute => EditDetails());
@@ -114,18 +132,27 @@ namespace CookMaster.ViewModel
 
         private void EditDetails()
         {
+            //Gör alla fälten editable när man trycker på Edit-button
+            
             Editable = true;
         }
 
         private void SaveDetails()
         {
-
-            _recipeManager.SelectedRecipe.Title = EditTitle;
-            _recipeManager.SelectedRecipe.Ingredients = EditIngredients;
-            _recipeManager.SelectedRecipe.Instructions = EditInstructions;
-
-            RecipeSaved?.Invoke("Dina ändringar är sparade.");
-            RequestClose?.Invoke();
+            //Uppdaterar receptet med ändringar som man fyllt i
+            if (!string.IsNullOrWhiteSpace(EditTitle) && !string.IsNullOrWhiteSpace(EditIngredients) && !string.IsNullOrWhiteSpace(EditInstructions) && !string.IsNullOrWhiteSpace(EditTime))
+            {
+                _recipeManager.SelectedRecipe.Title = EditTitle;
+                _recipeManager.SelectedRecipe.Ingredients = EditIngredients;
+                _recipeManager.SelectedRecipe.Instructions = EditInstructions;
+                _recipeManager.SelectedRecipe.Time = EditTime;
+                RecipeSaved?.Invoke("Dina ändringar är sparade.");
+                RequestClose?.Invoke();
+            }
+            else
+            {
+                ErrorText = "Alla fält måste vara ifyllda.";
+            }
         }
     }
 }

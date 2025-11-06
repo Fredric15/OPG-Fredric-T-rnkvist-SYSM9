@@ -33,7 +33,7 @@
             <PasswordBox Name="PwdBox" PasswordChanged="PwdBox_PasswordChanged" IsEnabled="{Binding SequrityMatch}" Margin="5,0,5,0"/>
             <TextBlock Text="Confirm new password:" FontWeight="Bold" Margin="5,0,5,0"/>
             <PasswordBox Name="ConfirmPwd" PasswordChanged="PwdBox_PasswordChanged" IsEnabled="{Binding SequrityMatch}" Margin="5,0,5,0"/>
-            <TextBlock Text="{Binding ErrorPwd}" Foreground="Red" Margin="5,0,5,0"/>
+            <TextBlock Text="{Binding ErrorPwd}" TextWrapping="Wrap" Foreground="Red" Margin="5,0,5,0"/>
         </StackPanel>
         <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Orientation="Horizontal">
             <Button Content="Save" Command="{Binding SaveCommand}" Width="50" Margin="5,0,5,5"/>

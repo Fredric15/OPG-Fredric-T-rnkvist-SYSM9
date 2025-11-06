@@ -27,6 +27,7 @@ namespace CookMaster.Views
         {
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
+            this.DataContext = new TwoFactorAuthViewModel(userManager);
             this.Loaded += TwoFactorAuthWindow_Loaded;
 
         }

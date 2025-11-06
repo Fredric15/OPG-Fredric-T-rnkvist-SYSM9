@@ -52,28 +52,35 @@ namespace CookMaster.ViewModel
 				OnPropertyChanged();
 			}
 		}
-		
-
-        public LoginViewModel(UserManager userManager)
+		public ICommand LoginCommand { get;}
+		public ICommand RegisterCommand { get;}
+		public ICommand RecoverPwCommand { get;}
+        
+		//Events som fönstrets code-behind kan prenumerera på och utföra olika handlingar
+		public event EventHandler<string> OnLoginSuccess;
+        public event EventHandler OpenRegister;
+        public event EventHandler RecoverPwd;
+        
+		public LoginViewModel(UserManager userManager)
 		{
             _userManager = userManager;
-			
-			
-		}
 
-	
-		public RelayCommand LoginCommand => new RelayCommand(execute => Login(), canExecute => CanLogin());
-        public RelayCommand RegisterCommand => new RelayCommand(execute => Register());
-        public RelayCommand RecoverPwCommand => new RelayCommand(execute => RecoverPassword());
+            LoginCommand = new RelayCommand(execute => Login(), canExecute => CanLogin());
+            RegisterCommand = new RelayCommand(execute => Register());
+            RecoverPwCommand = new RelayCommand(execute => RecoverPassword());
+        }
 
-        private void RecoverPassword()
+		private void RecoverPassword()
         {
             RecoverPwd?.Invoke(this, EventArgs.Empty);
 		}
 
+		//En metod som gör Login-button enabled så länge Username och Password innehåller text 
         private bool CanLogin() => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
 		private void Login()
 		{
+			//_userManager anropar sin Login-metod och skickar med användarens inmatade username samt lösenord
+			//Om true så skapas det en sex-siffrig kod som ska matas in i nästa fönster
             Random rnd = new Random();
             
 			if (_userManager.Login(Username,Password))
@@ -91,9 +98,5 @@ namespace CookMaster.ViewModel
 		{
 			OpenRegister?.Invoke(this, EventArgs.Empty);
 		}
-
-		public event EventHandler<string> OnLoginSuccess;
-		public event EventHandler OpenRegister;
-		public event EventHandler RecoverPwd;
-    }
+	}
 }

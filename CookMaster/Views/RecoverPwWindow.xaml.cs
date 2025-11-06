@@ -27,7 +27,7 @@ namespace CookMaster.Views
             InitializeComponent();
             var userManager = (UserManager)Application.Current.Resources["UserManager"];
             this.DataContext = new RecoverPwViewModel(userManager);
-            //this.DataContextChanged += OnDataContextChanged;
+            
             this.Loaded += RecoverPwWindow_Loaded;
         }
 
@@ -42,20 +42,6 @@ namespace CookMaster.Views
 
             }
         }
-
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-            if (e.NewValue is RecoverPwViewModel rvm)
-            {
-
-                rvm.RequestClose += () => this.Close();
-
-                rvm.RequestMessage += msg => MessageBox.Show(msg, "Information");
-            }
-
-        }
-
         private void PwdBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is RecoverPwViewModel vm)

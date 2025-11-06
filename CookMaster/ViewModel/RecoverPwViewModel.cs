@@ -110,6 +110,8 @@ namespace CookMaster.ViewModel
 
         private bool canSave()
         {
+            //Ser till så att man endast kan trycka Save om båda password-fälten är ifyllda samt att lösenorden matchar
+            
             if (!string.IsNullOrWhiteSpace(NewPwd) && !string.IsNullOrWhiteSpace(ConfirmPwd) && NewPwd == ConfirmPwd)
             {
                 return true;
@@ -119,6 +121,9 @@ namespace CookMaster.ViewModel
 
         private void Save()
         {
+            //Anropar _userManagers metod för att validera formatet på lösenordet
+            //Om true så anroper den _usermanagers ChangePassword-metod
+            
             if (_userManager.ValidatePassword(ConfirmPwd))
             {
                 _userManager.ChangePassword(InputUsername, NewPwd);
@@ -128,13 +133,28 @@ namespace CookMaster.ViewModel
             }
             else
             {
-                ErrorPwd = "Ej korrekt format på password";
+                ErrorPwd = "Lösenordet måste vara minst 8 tecken, samt innehålla en siffra och ett specialtecken.";
             }
         }
+        private void FindUser()
+        {
+            //Söker efter inmatade användarnamnet
+             
+            if (_userManager.FindUser(InputUsername))
+            {
+                ErrorText = string.Empty;
+            }
+            else
+            {
+                ErrorText = "Ingen användare hittades.";
+            }
 
+        }
         private bool CanConfirmAnswer()
         {
-            if (!string.IsNullOrWhiteSpace(InputSecurityAnswer))
+            //Så länge textrutan för Säkerhetssvaret är tom och ingen användare har hittats så är knappen inaktiv
+
+            if (!string.IsNullOrWhiteSpace(InputSecurityAnswer) && _userManager.CurrentUser != null)
             {
                 return true;
             }
@@ -143,7 +163,7 @@ namespace CookMaster.ViewModel
 
         private void ConfirmAnswer()
         {
-            
+            //Kontrollerar om inmatade svaret stämmer överrens med CurrentUser sparade svar, samt ingnorar eventuell storbokstav 
             if (string.Equals(_userManager.CurrentUser.SecurityAnswer, InputSecurityAnswer, StringComparison.OrdinalIgnoreCase))
             {
                 ErrorText = "Ditt svar matchade.";
@@ -168,18 +188,7 @@ namespace CookMaster.ViewModel
 
         
         }
-        private void FindUser()
-        {
-            if (_userManager.FindUser(InputUsername))
-            {
-               ErrorText = string.Empty;
-            }
-            else
-            {
-                ErrorText = "Ingen användare hittades.";
-            }
         
-        }
 
     }
 }
