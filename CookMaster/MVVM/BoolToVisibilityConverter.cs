@@ -9,6 +9,7 @@ using System.Windows.Data;
 
 namespace CookMaster.MVVM
 {
+    //Denna klassen omvandlar Visible och Collapsed till True or False som värde på Visibility
     public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

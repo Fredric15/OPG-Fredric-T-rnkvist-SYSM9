@@ -70,9 +70,10 @@
             </DataGrid>
 
             <StackPanel Grid.Column="1">
-                <Label Content="Filter by Category:" />
+                <Label Content="Filter by Category:"/>
                 <ComboBox ItemsSource="{Binding Category,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCategory,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0"/>
                 <!--Label, Combobox samt Button som endast är synliga för en Admin-->
+                <!--Om CurrentUser är en Admin så får UserManagers property "IsAdmin" värdet True och då syns dessa för en Admin när denna loggar in-->
                 <Label Content="Filter by User:" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <ComboBox ItemsSource="{Binding AllUsersList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUser,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="UserName" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5,0,5,0"/>
                 <Button Content="Reset filter" Command="{Binding ResetFilterCommand, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left" Visibility="{Binding Source={StaticResource UserManager}, Path=IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}" Margin="5"/>
